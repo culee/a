@@ -17,12 +17,20 @@ const QuestionSchema = mongoose.Schema({
       type: String,
       required: true,
    },
-   questions: {
+   description: {
+      type: String,
+      required: true,
+   },
+   level: {
+      type: String,
+      required: true,
+   },
+   options: {
       type: Array,
       required: true,
    },
-   answers: {
-      type: Array,
+   answer: {
+      type: Number,
       required: true,
    },
 });

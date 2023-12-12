@@ -36,6 +36,7 @@ class AddQuestion extends Component {
       questions = this.state.questions.map((question, index) => {
          return {
             description: question.questionDescripiton,
+            level: question.level,
             options: [
                {
                   option: question.opiton1,

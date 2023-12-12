@@ -6,7 +6,6 @@ const User = require('../model/User');
 require('dotenv').config();
 
 
-
 /**
  * @method - GET
  * @param - /question
@@ -14,8 +13,12 @@ require('dotenv').config();
  */
 router.get('/search', auth, async (req, res) => {
    console.log('fetch question');
-   const { testName, className, section } = req.query
+   const { testName, className, section, level } = req.query;
    const conditions = {};
+   if (level) {
+      conditions.level = level;
+   }
+
    if (testName) {
       conditions.testName = testName;
    }
@@ -55,20 +58,27 @@ router.post('/create-question', auth, async (req, res) => {
       req.body;
    console.log(req.body);
    try {
+      let savedQuestions = [];
 
-      let createQuestion = new Questions({
-         teacherId,
-         testName,
-         answers,
-         className,
-         questions,
-         section,
-      });
+      for (let i = 0; i < questions.length; i++) {
+         let q = questions[i];
+         let createQuestion = new Questions({
+            teacherId,
+            testName,
+            className,
+            section,
+            description: q.description,
+            level: q.level,
+            options: q.options,
+            answer: answers[i]
+         });
 
-      let data = await createQuestion.save();
+         let data = await createQuestion.save();
+         savedQuestions.push(data);
+      }
 
       const payload = {
-         data,
+         data: savedQuestions,
       };
 
       res.status(200).json({
@@ -88,21 +98,25 @@ router.post('/create-question', auth, async (req, res) => {
 router.put('/update-question/:questionId', auth, async (req, res) => {
    const questionId = req.params.questionId;
    console.log(questionId);
-   const questionsData = req.body.questions;
+   const updateData = req.body;
    try {
-      const data = await Questions.findOneAndUpdate(
-         { _id: questionId },
-         { questions: questionsData },
-         function(err, updatedData) {
-            if (err) {
-               return res.status(400).json({ message: 'failed to update document' });
-            } else {
-               return res.status(200).json({
-                  message: 'questions succesfully updated',
-               });
-            }
-         },
-      );
+      const existingQuestion = await Questions.findById(questionId);
+      if (!existingQuestion) {
+         return res.status(404).json({ message: 'Question not found' });
+      }
+
+      existingQuestion.testName = updateData.testName;
+      existingQuestion.className = updateData.className;
+      existingQuestion.section = updateData.section;
+      existingQuestion.description = updateData.description;
+      existingQuestion.level = updateData.level;
+      existingQuestion.options = updateData.options;
+      existingQuestion.answer = updateData.answer;
+
+      const updatedQuestion = await existingQuestion.save();
+      res.status(200).json({
+         data: updatedQuestion,
+      });
    } catch (err) {
       console.log(err.message);
       res.status(500).send('Error in Updating');
