@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { Row, Form, Button, Select, notification, Input } from 'antd';
 import './QuestionDetailModal.css';
 import {
@@ -27,6 +27,7 @@ import axios from 'axios';
 const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
     const isOpen = useMemo(() => Boolean(data), [data]);
     const [isFetching, setIsFetching] = useState(false);
+    const [canEdit, setCanEdit] = useState(false);
     const initValues = useMemo(() => {
         if (!data) {
             return null;
@@ -45,6 +46,11 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
         });
         return obj;
     }, [data]);
+
+    const isDisableInputField = useMemo(
+        () => !canEdit || isFetching,
+        [canEdit, isFetching]
+    );
 
     const handleUpdateData = useCallback(
         async (values) => {
@@ -114,6 +120,11 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
         },
         [data]
     );
+    useEffect(() => {
+        if (!isOpen) {
+            setCanEdit(false);
+        }
+    }, [isOpen]);
 
     if (!isOpen) {
         return null;
@@ -141,8 +152,9 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                                         message: 'Hãy chọn môn!',
                                     },
                                 ]}
+                                disabled={isDisableInputField}
                             >
-                                <Select defaultValue={data.testName}>
+                                <Select disabled={isDisableInputField}>
                                     <Select.Option value='Toán'>
                                         Toán
                                     </Select.Option>
@@ -161,8 +173,9 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                                         message: 'Hãy chọn khối!',
                                     },
                                 ]}
+                                disabled={isDisableInputField}
                             >
-                                <Select>
+                                <Select disabled={isDisableInputField}>
                                     {GRADE_NAME_LIST.map((val) => (
                                         <Select.Option key={val} value={val}>
                                             {val}
@@ -179,8 +192,9 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                                         message: 'Hãy chọn lớp!',
                                     },
                                 ]}
+                                disabled={isDisableInputField}
                             >
-                                <Select>
+                                <Select disabled={isDisableInputField}>
                                     {CLASS_NAME_TEST.map((val) => (
                                         <Select.Option key={val} value={val}>
                                             {val}
@@ -194,13 +208,16 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                             Câu hỏi
                         </p>
                         <div className='element__wrapper'>
-                            <Form.Item name='description'>
+                            <Form.Item
+                                name='description'
+                                disabled={isDisableInputField}
+                            >
                                 <Input.TextArea
                                     placeholder='Vui lòng nhập!'
                                     className='input '
                                     name='description'
-                                    defaultValue={data.description}
                                     style={{ margin: '0 5px' }}
+                                    disabled={isDisableInputField}
                                 />
                             </Form.Item>
                         </div>
@@ -209,12 +226,13 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                             Độ khó
                         </p>
                         <div className='w-1/3'>
-                            <Form.Item name='level'>
+                            <Form.Item
+                                name='level'
+                                disabled={isDisableInputField}
+                            >
                                 <Select
-                                    defaultValue={
-                                        QUESTION_LEVEL[data.level.trim()]
-                                    }
                                     name='level'
+                                    disabled={isDisableInputField}
                                 >
                                     {Object.entries(QUESTION_LEVEL).map(
                                         ([key, value]) => (
@@ -238,12 +256,14 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                                 <Form.Item
                                     name={`option${index + 1}`}
                                     key={`option-${index}`}
+                                    disabled={isDisableInputField}
                                 >
                                     <Input
                                         placeholder={`Đáp án ${index + 1}`}
                                         className='input option'
                                         value={option}
                                         style={{ margin: '10 5px' }}
+                                        disabled={isDisableInputField}
                                     />
                                 </Form.Item>
                             ))}
@@ -252,7 +272,7 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                         <p className='primary-wihtoutFont mt-2 font-medium'>
                             Đáp án
                         </p>
-                        <Form.Item name='answer'>
+                        <Form.Item name='answer' disabled={isDisableInputField}>
                             <Input
                                 placeholder='Chọn đáp án đúng(VD: 1 hoặc 1, 2, 3)'
                                 type='number'
@@ -260,18 +280,40 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                                 style={{ margin: '10 5px' }}
                                 min={1}
                                 max={4}
+                                disabled={isDisableInputField}
                             />
                         </Form.Item>
-                        <Form.Item>
+
+                        <div className='flex items-center gap-1'>
+                            {canEdit ? (
+                                <Form.Item>
+                                    <Button
+                                        type='primary'
+                                        htmlType='submit'
+                                        disabled={isFetching}
+                                        block
+                                    >
+                                        Xác nhận
+                                    </Button>
+                                </Form.Item>
+                            ) : (
+                                <Button
+                                    type='primary'
+                                    disabled={isFetching}
+                                    block
+                                    onClick={() => setCanEdit(true)}
+                                >
+                                    Sửa
+                                </Button>
+                            )}
                             <Button
-                                type='primary'
-                                className='sign__up'
-                                htmlType='submit'
                                 disabled={isFetching}
+                                block
+                                onClick={onClose}
                             >
-                                submit
+                                Hủy
                             </Button>
-                        </Form.Item>
+                        </div>
                     </Form>
                 </Row>
             </div>
