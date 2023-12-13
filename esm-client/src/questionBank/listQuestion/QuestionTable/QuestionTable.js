@@ -99,39 +99,39 @@ const QuestionTable = ({ list }) => {
                 onClose={() => setSelectedQuestion(null)}
                 onUpdateSuccess={handleUpdateData}
             />
-            <div className='table-container'>
+            <div className='qt_table-container'>
                 <div className='flex'>
-                    <div className='item'>
+                    <div className='qt_item'>
                         <p className='header-item'>STT</p>
                     </div>
-                    <div className='item'>
-                        <p className='header-item'>Môn</p>
+                    <div className='qt_item'>
+                        <p className='qt_header-item'>Môn</p>
                     </div>
-                    <div className='item'>
-                        <p className='header-item'>Lớp</p>
+                    <div className='qt_item'>
+                        <p className='qt_header-item'>Lớp</p>
                     </div>
-                    <div className='item item-question'>
-                        <p className='header-item '>Câu hỏi</p>
+                    <div className='qt_item qt_item-question'>
+                        <p className='qt_header-item '>Câu hỏi</p>
                     </div>
-                    <div className='item action-item'>
-                        <p className='header-item'>Action</p>
+                    <div className='qt_item qt_action-item'>
+                        <p className='qt_header-item'>Action</p>
                     </div>
                 </div>
                 {dataList.map((item, index) => (
-                    <div key={item._id} className='flex row'>
-                        <div className='item'>
+                    <div key={item._id} className='flex qt_row'>
+                        <div className='qt_item'>
                             <p>{index + 1}</p>
                         </div>
-                        <div className='item'>
+                        <div className='qt_item'>
                             <p>{item.testName}</p>
                         </div>
-                        <div className='item'>
+                        <div className='qt_item'>
                             <p>{item.className}</p>
                         </div>
-                        <div className='item item-question line-clamp-1 break-all'>
+                        <div className='qt_item qt_item-question line-clamp-1 break-all'>
                             <p className='align-start'>{item.description}</p>
                         </div>
-                        <div className='item flex gap-4 justify-center action-item'>
+                        <div className='qt_item flex gap-4 justify-center qt_action-item'>
                             <FaEye
                                 color='#669cc9'
                                 className='cursor-pointer'

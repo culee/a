@@ -1,27 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
-// import { connect } from 'react-redux';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import { Form, Button, Select } from 'antd';
 import './listquestionbank.css';
 
-// import ShowQuestion from './ShowQuestion';
 import QuestionTable from './QuestionTable/QuestionTable';
 
 const ListExamQuestionBank = ({ fetchDataQuestion }) => {
     const { Option } = Select;
-    const [modal, setModal] = useState(false);
-    const dispatch = useDispatch();
-
     const [questionData, setQuestionData] = useState([]);
     const [testName, setTestName] = useState('Môn Học');
     const [className, setClassName] = useState('Khối');
     const [section, setSection] = useState('Lớp');
-
-    const toggleModal = () => {
-        setModal(!modal);
-    };
 
     const fetchData = useCallback(
         async (searchWithParams = true) => {
@@ -55,7 +45,6 @@ const ListExamQuestionBank = ({ fetchDataQuestion }) => {
         setClassName(className);
         setSection(section);
         fetchData();
-        //   fetchDataQuestion({ testName, className, section });
     };
 
     const clearInput = () => {
@@ -114,7 +103,6 @@ const ListExamQuestionBank = ({ fetchDataQuestion }) => {
                         <QuestionTable list={questionData} />
                     </div>
                 </div>
-                {/* {modal && <ShowQuestion />} */}
             </div>
         </div>
     );

@@ -23,18 +23,18 @@ const DialogConfirm = ({
     return (
         <>
             {isOpen && (
-                <div className='backdrop' onClick={onClose}>
+                <div className='dc_backdrop' onClick={onClose}>
                     <div
-                        className='dialog-container'
+                        className='dc_dialog-container'
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className='dialog-title'>
+                        <div className='dc_dialog-title'>
                             <p>{title}</p>
                         </div>
-                        <div className='dialog-content'>
+                        <div className='dc_dialog-content'>
                             <p>{content}</p>
                         </div>
-                        <div className='dialog-actions'>
+                        <div className='dc_dialog-actions'>
                             <Button onClick={onClose} disabled={disabled}>
                                 Cancel
                             </Button>

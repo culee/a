@@ -120,8 +120,8 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
     }
 
     return (
-        <div className='backdrop' onClick={onClose}>
-            <div className='container' onClick={(e) => e.stopPropagation()}>
+        <div className='qdm_backdrop' onClick={onClose}>
+            <div className='qdm_container' onClick={(e) => e.stopPropagation()}>
                 <Row justify='center' align='middle'>
                     <p className='sub-title__signup'>
                         Thông tin câu hỏi QuestionBank

@@ -1,4 +1,6 @@
-.backdrop {
+/* question-detail-modal -> qdm */
+
+.qdm_backdrop {
     background-color: #cccccc69;
     position: fixed;
     inset: 0;
@@ -8,7 +10,7 @@
     justify-content: center;
 }
 
-.container {
+.qdm_container {
     width: calc(100vw - 64px);
     max-width: 500px;
     margin: 15px auto;

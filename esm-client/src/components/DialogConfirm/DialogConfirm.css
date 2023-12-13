@@ -1,4 +1,5 @@
-.backdrop {
+/* dialog-confirm -> dc */
+.dc_backdrop {
     background-color: #cccccc69;
     position: fixed;
     inset: 0;
@@ -8,7 +9,7 @@
     justify-content: center;
 }
 
-.dialog-container {
+.dc_dialog-container {
     width: calc(100vw - 64px);
     max-width: 400px;
     max-height: calc(100vh - 64px);
@@ -21,7 +22,7 @@
     flex-direction: column;
 }
 
-.dialog-title {
+.dc_dialog-title {
     padding: 16px;
     font-size: 20px;
     font-weight: 700;
@@ -29,12 +30,12 @@
     border-bottom: 1px solid #ccc;
 }
 
-.dialog-content {
+.dc_dialog-content {
     flex: 1;
     padding: 32px 16px
 }
 
-.dialog-actions {
+.dc_dialog-actions {
     display: flex;
     align-items: center;
     justify-content: end;
