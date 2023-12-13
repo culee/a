@@ -1,0 +1,21 @@
+.backdrop {
+    background-color: #cccccc69;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: calc(100vw - 64px);
+    max-width: 500px;
+    margin: 15px auto;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px 6px #adabb8;
+    background: #fff;
+    max-height: calc(100vh - 64px);
+    overflow: auto;
+}
