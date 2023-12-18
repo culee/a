@@ -43,22 +43,22 @@ router.get("/profile/:profileID", auth, async (req, res) => {
 
 router.get("/tests/:studentClass", auth, async (req, res) => {
   const studentClass = req.params.studentClass;
-
+  const { startTime } = req.query;
+  const query = { className: studentClass };
+  if (startTime) {
+    query.startTime = { $gte: new Date(startTime) };
+  }
   try {
-    await Test.find(
-      {
-        className: studentClass,
-      },
-      "-assignedTo -submitBy -teacherId -__v"
-    ).exec(function (err, obj) {
-      if (err) {
-        return res.status(400).json({ err });
-      } else {
-        return res.status(200).json({
-          obj,
-        });
-      }
-    });
+    await Test.find(query, '-assignedTo -submitBy -teacherId -__v')
+       .exec(function (err, obj) {
+         if (err) {
+           return res.status(400).json({ err });
+         } else {
+           return res.status(200).json({
+             obj,
+           });
+         }
+       });
   } catch (err) {
     console.log(err.message);
     res.status(500).send("Error in fetching Test Data");
@@ -73,11 +73,14 @@ router.get("/tests/:studentClass", auth, async (req, res) => {
 
 router.get("/attempt-tests/:studentID", auth, async (req, res) => {
   const studentID = req.params.studentID;
+  const { startTime } = req.query;
+  const query = { _id: studentID };
+  if (startTime) {
+    query.startTime = { $gte: new Date(startTime) };
+  }
 
   try {
-    await Student.find({
-      _id: studentID,
-    }).exec(function (err, obj) {
+    await Student.find(query).exec(function (err, obj) {
       if (err) {
         return res.status(400).json({ err });
       } else {
