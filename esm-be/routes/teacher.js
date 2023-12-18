@@ -13,23 +13,25 @@ require('dotenv').config();
  */
 
 router.get('/tests/:profileID', auth, async (req, res) => {
+   // /tests/:profileID?startTime=2023-01-01T12:00:00
    const profileID = req.params.profileID;
+   const { startTime } = req.query;
+   const query = { teacherId: profileID };
+   if (startTime) {
+      query.startTime = { $gte: new Date(startTime) };
+   }
    console.log('teacher', profileID);
    try {
-      await Test.find(
-         {
-            teacherId: profileID,
-         },
-         'submitBy className testName section',
-      ).exec(function (err, obj) {
-         if (err) {
-            return res.status(400).json({ err });
-         } else {
-            return res.status(200).json({
-               obj,
-            });
-         }
-      });
+      await Test.find(query, 'submitBy className testName section')
+         .exec(function (err, obj) {
+            if (err) {
+               return res.status(400).json({ err });
+            } else {
+               return res.status(200).json({
+                  obj,
+               });
+            }
+         });
    } catch (err) {
       console.log(err.message);
       res.status(500).send('Error in fetching Tests');
@@ -96,7 +98,7 @@ router.get('/profile/:profileID', auth, async (req, res) => {
  */
 
 router.post('/create-test', auth, async (req, res) => {
-   const { teacherId, testName, category, minutes, rules, className, outOfMarks, answers, questions, section } =
+   const { teacherId, testName, category, minutes, rules, className, outOfMarks, answers, questions, section, startTime } =
       req.body;
    console.log(questions, answers, rules);
    try {
@@ -123,6 +125,7 @@ router.post('/create-test', auth, async (req, res) => {
          outOfMarks,
          questions,
          section,
+         startTime //'2023-01-01T12:00:00'
       });
 
       let data = await createTest.save();

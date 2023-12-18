@@ -51,6 +51,10 @@ const TestSchema = mongoose.Schema({
    submitBy: {
       type: Array,
    },
+   startTime: {
+      type: Date,
+      required: true,
+   },
 });
 
 module.exports = mongoose.model('tests', TestSchema);
