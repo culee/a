@@ -32,7 +32,7 @@ function TestInstruction(props) {
     }
 
     const attempted = useMemo(() => {
-        return tests.some((item) => item.testName === testName);
+        return props.selectedTest?.attempted || false;
     }, [tests, testName]);
 
     const handleButtonClick = () => {
@@ -41,7 +41,6 @@ function TestInstruction(props) {
             icon: <ExclamationCircleOutlined />,
             content: 'Click OK để bắt đầu!',
             onOk() {
-                console.log('OK');
                 history.push('/start-test');
             },
             onCancel() {
@@ -62,7 +61,6 @@ function TestInstruction(props) {
             if (rest <= 0) {
                 setDisabledBtn(false);
                 window.clearInterval(timer.current);
-                console.log(rest);
                 return;
             }
             setDisabledBtn(true);
