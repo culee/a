@@ -1,31 +1,32 @@
 .table-list-questionbank {
-   width: 90%;
-   margin: 0 auto;
+  width: 90%;
+  margin: 0 auto;
+  text-align: center;
 }
 
 table {
-   border-collapse: collapse;
-   border: 1px solid #c2b3b3;
-   padding: 10px;
-   margin: 10px;
+  border-collapse: collapse;
+  border: 1px solid #c2b3b3;
+  padding: 10px;
+  margin: 10px;
 }
 
 table > thead {
-   border: 1px solid #c2b3b3;
+  border: 1px solid #c2b3b3;
 }
 
 table > thead > tr > th {
-   border-right: 1px solid #c2b3b3;
+  border-right: 1px solid #c2b3b3;
 }
 
 table > tbody > tr {
-   border: 1px solid #c2b3b3;
+  border: 1px solid #c2b3b3;
 }
 
 table > tbody > tr > td {
-   border-right: 1px solid #c2b3b3;
+  border-right: 1px solid #c2b3b3;
 }
 
 table > tbody > tr:hover {
-   background-color: #adabab;
+  background-color: #adabab;
 }

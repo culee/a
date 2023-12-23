@@ -29,7 +29,8 @@ export default function RenderDataQuestion(props) {
                     className="px-[30px] py-4 rounded-2xl mb-5 my-3 shadow-[0_0_4px_6px_rgba(19,60,101,0.15)]"
                  >
                     <div className="flex">
-                       <p className="sub__render__heading">Question {index + 1}</p>:
+                       <p className="sub__render__heading">Câu hỏi {index + 1}</p>:
+                       <p className="ml-4 px-4 bg-[#cacaca] text-[#565761] rounded-md">{item.terms}</p>
                        <p className={`ml-4 ${item.level} `}>{item.level}</p>
                     </div>
                     <div className="render__item">
@@ -41,6 +42,7 @@ export default function RenderDataQuestion(props) {
                        />
                        <TiDelete className="danger" onClick={() => handleClick(index)} style={{ fontSize: '30px' }} />
                     </div>
+                    <p>Các câu trả lời:</p>
                     <div className="question__options">
                        <Input
                           className="input option"

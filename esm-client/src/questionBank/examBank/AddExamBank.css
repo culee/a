@@ -1,0 +1,34 @@
+.Toán {
+   background: #f98866;
+   color: white;
+   padding: 0px 15px;
+   border-radius: 15px;
+}
+.Lý {
+   background: #80bd9e;
+   color: white;
+   padding: 0px 15px;
+   border-radius: 15px;
+}
+
+.Hóa {
+   background: #89da59;
+   color: white;
+   padding: 0px 15px;
+   border-radius: 15px;
+}
+
+.qt_item {
+   text-align: center;
+}
+/* 
+.table-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100vh;
+}
+
+table {
+   width: 80%;
+} */

@@ -25,9 +25,13 @@ import ChooseCreateTest from '../Teacher/CreateTest/ChooseCreateTest';
 import QuestionBankCreateTest from '../Teacher/CreateTest/QuestionBankCreateTest';
 
 import QuestionBank from '../questionBank/QuestionBank';
-
 import AddQuestion from '../questionBank/addQuestion/AddQuestion';
 import ListQuestionBank from '../questionBank/listQuestion/ListQuestionBank';
+
+import AddExamBank from '../questionBank/examBank/AddExamBank';
+import ListExamBank from '../questionBank/examBank/ListExamBank';
+
+import ForgotPassword from '../forgotPassword/ForgotPassword';
 
 function App(props) {
    const [count, setCount] = useState(1);
@@ -52,6 +56,7 @@ function App(props) {
             <Switch>
                <Route exact={true} path={'/signin'} component={Login} />
                <Route exact={true} path="/signup" component={Signup} />
+               <Route exact={true} path="/forgot-password" component={ForgotPassword} />
 
                <Route exact={true} path="/add-question" component={AddQuestion} />
                <Route exact={true} path="/list-question" component={ListQuestionBank} />
@@ -76,15 +81,28 @@ function App(props) {
 
                <ProtectedRoute
                   exact={true}
+                  path="/list-exam-bank"
+                  component={Roles.teacher === role ? ListExamBank : Login}
+               />
+
+               <ProtectedRoute
+                  exact={true}
                   path="/question-bank"
                   component={Roles.teacher === role ? QuestionBank : Login}
                />
 
                <ProtectedRoute exact={true} path="/attempt-test" component={AttemptTest} />
+
                <ProtectedRoute
                   exact={true}
                   path="/create-test"
                   component={Roles.teacher === role ? CreateTest : AttemptTest}
+               />
+
+               <ProtectedRoute
+                  exact={true}
+                  path="/add-exam-bank"
+                  component={Roles.teacher === role ? AddExamBank : AddExamBank}
                />
 
                <ProtectedRoute exact={true} path="/result" component={Result} />

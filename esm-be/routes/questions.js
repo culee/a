@@ -5,7 +5,6 @@ const Questions = require('../model/Questions');
 const User = require('../model/User');
 require('dotenv').config();
 
-
 /**
  * @method - GET
  * @param - /question
@@ -13,7 +12,7 @@ require('dotenv').config();
  */
 router.get('/search', auth, async (req, res) => {
    console.log('fetch question');
-   const { testName, className, section, level } = req.query;
+   const { testName, className, terms, level } = req.query;
    const conditions = {};
    if (level) {
       conditions.level = level;
@@ -27,13 +26,13 @@ router.get('/search', auth, async (req, res) => {
       conditions.className = className;
    }
 
-   if (section) {
-      conditions.section = section;
+   if (terms) {
+      conditions.terms = terms;
    }
 
    console.log(conditions);
    try {
-      await Questions.find(conditions, function(err, obj) {
+      await Questions.find(conditions, function (err, obj) {
          if (err) {
             return res.status(400).json({ err });
          } else {
@@ -54,8 +53,7 @@ router.get('/search', auth, async (req, res) => {
  * @description - Creating question for the students using teacherID
  */
 router.post('/create-question', auth, async (req, res) => {
-   const { teacherId, testName, className, answers, questions, section } =
-      req.body;
+   const { teacherId, testName, className, answers, questions } = req.body;
    console.log(req.body);
    try {
       let savedQuestions = [];
@@ -66,11 +64,11 @@ router.post('/create-question', auth, async (req, res) => {
             teacherId,
             testName,
             className,
-            section,
+            terms: q.terms,
             description: q.description,
             level: q.level,
             options: q.options,
-            answer: answers[i]
+            answer: answers[i],
          });
 
          let data = await createQuestion.save();
@@ -107,7 +105,7 @@ router.put('/update-question/:questionId', auth, async (req, res) => {
 
       existingQuestion.testName = updateData.testName;
       existingQuestion.className = updateData.className;
-      existingQuestion.section = updateData.section;
+      existingQuestion.terms = updateData.terms;
       existingQuestion.description = updateData.description;
       existingQuestion.level = updateData.level;
       existingQuestion.options = updateData.options;
@@ -123,7 +121,6 @@ router.put('/update-question/:questionId', auth, async (req, res) => {
    }
 });
 
-
 /**
  * @method - DELETE
  * @param - /delete-questions/:questionsid
@@ -131,9 +128,9 @@ router.put('/update-question/:questionId', auth, async (req, res) => {
  */
 router.delete('/delete-question/:questionId', auth, async (req, res) => {
    const questionId = req.params.questionId;
-   console.log(questionId);
+   // console.log(questionId);
    try {
-      const data = await Questions.findByIdAndDelete(questionId, function(err) {
+      const data = await Questions.findByIdAndDelete(questionId, function (err) {
          if (err) {
             return res.status(400).json({ message: 'failed to delete document' });
          } else {

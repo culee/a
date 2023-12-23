@@ -13,7 +13,7 @@ const QuestionSchema = mongoose.Schema({
       type: String,
       required: true,
    },
-   section: {
+   terms: {
       type: String,
       required: true,
    },

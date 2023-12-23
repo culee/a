@@ -17,6 +17,14 @@ class AddQuestion extends Component {
          testCreated: false,
       };
    }
+   openNotification = () => {
+      const args = {
+         message: 'Đã thêm câu hỏi vào QuestionBank',
+         description: 'Thông tin chi tiết ở mục danh sách QuestionBank',
+         duration: 3,
+      };
+      notification.open(args);
+   };
 
    static getDerivedStateFromProps(props, state) {
       return {
@@ -31,12 +39,13 @@ class AddQuestion extends Component {
 
       console.log(values);
 
-      const { testName, className, section } = values;
+      const { testName, className } = values;
 
       questions = this.state.questions.map((question, index) => {
          return {
             description: question.questionDescripiton,
             level: question.level,
+            terms: question.terms,
             options: [
                {
                   option: question.opiton1,
@@ -53,9 +62,11 @@ class AddQuestion extends Component {
             ],
          };
       });
+
       this.state.questions.map((question, index) => {
          answers.push(parseInt(question.answer));
       });
+
       const teacherId = this.props.teacherID;
 
       const sendData = {
@@ -64,13 +75,14 @@ class AddQuestion extends Component {
          answers,
          className,
          questions,
-         section,
+
          testCreated: false,
       };
 
       console.log(sendData);
 
       this.props.submitQuestion(sendData);
+      this.openNotification();
    };
 
    onFinishFailed = (errorInfo) => {
@@ -85,19 +97,10 @@ class AddQuestion extends Component {
       });
    };
 
-   openNotification = () => {
-      const args = {
-         message: 'Đã thêm câu hỏi vào QuestionBank',
-         description: 'Thông tin chi tiết ở mục danh sách QuestionBank',
-         duration: 3,
-      };
-      notification.open(args);
-   };
-
-   addQuestion = ({ questionDescripiton, opiton1, opiton2, opiton3, opiton4, answer, level }) => {
+   addQuestion = ({ questionDescripiton, opiton1, opiton2, opiton3, opiton4, answer, level, terms }) => {
       this.setState({
          questions: [
-            { questionDescripiton, opiton1, opiton2, opiton3, opiton4, answer, level },
+            { questionDescripiton, opiton1, opiton2, opiton3, opiton4, answer, level, terms },
             ...this.state.questions,
          ],
       });
@@ -114,74 +117,73 @@ class AddQuestion extends Component {
       const { Option } = Select;
 
       return (
-         <div className="addquestion">
-            <Row justify="center" align="middle">
-               <div className="form-addquestion">
-                  <p className="sub-title__signup"> Tạo câu hỏi QuestionBank</p>
-                  <Form
-                     name="basic"
-                     className="create__test__form"
-                     initialValues={{
-                        remember: true,
-                     }}
-                     onFinish={this.submitForm}
-                     onFinishFailed={this.onFinishFailed}
-                  >
-                     <div className="element__wrapper">
-                        <Form.Item name="testName" rules={[{ required: true, message: 'Hãy chọn môn!' }]}>
-                           <Select defaultValue="Môn thi">
-                              <Option value="Toán">Toán</Option>
-                              <Option value="Lý">Lý</Option>
-                              <Option value="Hóa">Hóa</Option>
-                           </Select>
+         <div className="pb-20 bg-[#eaeaea]">
+            <div className="addquestion">
+               <Row justify="center" align="middle">
+                  <div className="form-addquestion">
+                     <p className="sub-title__signup pt-3"> Tạo câu hỏi QuestionBank</p>
+                     <Form
+                        name="basic"
+                        className="create__test__form"
+                        initialValues={{
+                           remember: true,
+                        }}
+                        onFinish={this.submitForm}
+                        onFinishFailed={this.onFinishFailed}
+                     >
+                        <div className="element__wrapper">
+                           <div className="w-2/3 flex">
+                              <Form.Item name="testName" rules={[{ required: true, message: 'Hãy chọn môn!' }]}>
+                                 <Select defaultValue="Môn thi">
+                                    <Option value="Toán">Toán</Option>
+                                    <Option value="Lý">Lý</Option>
+                                    <Option value="Hóa">Hóa</Option>
+                                 </Select>
+                              </Form.Item>
+
+                              <Form.Item name="className" rules={[{ required: true, message: 'Hãy chọn khối!' }]}>
+                                 <Select defaultValue="Khối">
+                                    <Option value="X">X</Option>
+                                    <Option value="XI">XI</Option>
+                                    <Option value="XII">XII</Option>
+                                 </Select>
+                              </Form.Item>
+                           </div>
+                        </div>
+
+                        <RenderDataQuestion
+                           ruleData={this.state.rules}
+                           rules={true}
+                           clickedRule={this.handleDeleteRule}
+                        />
+
+                        <RenderDataQuestion
+                           questionData={this.state.questions}
+                           questions={true}
+                           clickedRule={this.handleDeleteQuestion}
+                        />
+
+                        <p className="primary-wihtoutFont mt-2" style={{ fontWeight: '500' }}>
+                           Nhập câu hỏi
+                        </p>
+                        <Form.Item>
+                           <CreateQuestionBank addQuestion={this.addQuestion} />
                         </Form.Item>
-
-                        <Form.Item name="className" rules={[{ required: true, message: 'Hãy chọn khối!' }]}>
-                           <Select defaultValue="Khối">
-                              <Option value="X">X</Option>
-                              <Option value="XI">XI</Option>
-                              <Option value="XII">XII</Option>
-                           </Select>
+                        <Form.Item>
+                           <Button
+                              type="primary"
+                              loading={this.state.isLoading}
+                              className="sign__up"
+                              htmlType="submit"
+                              disabled={this.state.questions.length < 1 ? true : false}
+                           >
+                              {this.state.isLoading ? 'Loading...' : 'Thêm câu hỏi vào ngân hàng'}
+                           </Button>
                         </Form.Item>
-
-                        <Form.Item name="section" rules={[{ required: true, message: 'Hãy chọn lớp!' }]}>
-                           <Select defaultValue="Lớp">
-                              <Option value="A">A</Option>
-                              <Option value="B">B</Option>
-                              <Option value="C">C</Option>
-                              <Option value="D">D</Option>
-                           </Select>
-                        </Form.Item>
-                     </div>
-
-                     <RenderDataQuestion ruleData={this.state.rules} rules={true} clickedRule={this.handleDeleteRule} />
-
-                     <RenderDataQuestion
-                        questionData={this.state.questions}
-                        questions={true}
-                        clickedRule={this.handleDeleteQuestion}
-                     />
-
-                     <p className="primary-wihtoutFont mt-2" style={{ fontWeight: '500' }}>
-                        Nhập câu hỏi
-                     </p>
-                     <Form.Item>
-                        <CreateQuestionBank addQuestion={this.addQuestion} />
-                     </Form.Item>
-                     <Form.Item>
-                        <Button
-                           type="primary"
-                           loading={this.state.isLoading}
-                           className="sign__up"
-                           htmlType="submit"
-                           disabled={this.state.questions.length < 1 ? true : false}
-                        >
-                           {this.state.isLoading ? 'Loading...' : 'Thêm câu hỏi vào ngân hàng'}
-                        </Button>
-                     </Form.Item>
-                  </Form>
-               </div>
-            </Row>
+                     </Form>
+                  </div>
+               </Row>
+            </div>
          </div>
       );
    }

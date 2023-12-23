@@ -1,0 +1,41 @@
+.Difficult {
+   background: #bb3636;
+   color: white;
+   border-radius: 15px;
+}
+
+.Medium {
+   background: #9b921c;
+   color: white;
+   border-radius: 15px;
+}
+
+.Easy {
+   background: #289128;
+   color: white;
+   border-radius: 15px;
+}
+
+.level-exam {
+   width: 150px;
+}
+
+.Toán {
+   background: #f98866;
+   color: white;
+   padding: 0px 15px;
+   border-radius: 15px;
+}
+.Lý {
+   background: #80bd9e;
+   color: white;
+   padding: 0px 15px;
+   border-radius: 15px;
+}
+
+.Hóa {
+   background: #89da59;
+   color: white;
+   padding: 0px 15px;
+   border-radius: 15px;
+}

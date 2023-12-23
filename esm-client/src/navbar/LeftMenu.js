@@ -41,6 +41,7 @@ const LeftMenu = (props) => {
    const assignedTestRoute = isAuthenticated ? '/assigned-test' : '';
    const chooseCreateTest = isAuthenticated ? '/choose-create-test' : '';
    const questionBank = isAuthenticated ? '/question-bank' : '';
+   const forgotPassword = !isAuthenticated ? '/forgot-password' : '';
 
    const style = {
       display: location.pathname === '/start-test' ? 'none' : 'block',
@@ -62,17 +63,26 @@ const LeftMenu = (props) => {
                   {isAuthenticated ? (Roles.teacher === role ? 'Bài kiểm tra giao' : 'Kết quả') : ''}
                </NavLink>
             </Menu.Item>
-            <Menu.Item key="04" className={!isAuthenticated ? 'display-none' : ''}>
+            {/* <Menu.Item key="04" className={!isAuthenticated ? 'display-none' : ''}>
                <NavLink to={Roles.teacher === role ? questionBank : ''}>
                   {isAuthenticated && Roles.teacher === role ? 'Question Bank' : ''}
                </NavLink>
-            </Menu.Item>
+            </Menu.Item> */}
             <Menu.Item key="05" className={!isAuthenticated ? 'display-none' : ''}>
                <NavLink to={profileRoute} onClick={handleProfile}>
                   {isAuthenticated ? 'Thông tin cá nhân' : ''}
                </NavLink>
             </Menu.Item>
+            <Menu.Item key="07" className={isAuthenticated ? 'display-none' : ''}>
+               <NavLink to={forgotPassword}>{isAuthenticated ? 'Home' : 'Quên mật khẩu'}</NavLink>
+            </Menu.Item>
+            <Menu.Item key="04" className={!isAuthenticated ? 'display-none' : ''}>
+               <NavLink to={Roles.teacher === role ? questionBank : ''}>
+                  {isAuthenticated && Roles.teacher === role ? 'Question Bank' : ''}
+               </NavLink>
+            </Menu.Item>
          </Menu>
+
          <div className="right-side">
             <NavLink
                to={signOutRoute}

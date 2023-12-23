@@ -4,11 +4,15 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 
 export default function Rules(props) {
    const [questionDescripiton, setQuestionDescripiton] = useState('');
+
    const [opiton1, setOption1] = useState('');
    const [opiton2, setOption2] = useState('');
    const [opiton3, setOption3] = useState('');
    const [opiton4, setOption4] = useState('');
+
    const [answer, setAnswer] = useState('');
+   const [editAnswer, setEditAnswer] = useState('');
+
    const submitInput = (
       <div>
          <p className="verified-popover ">Add Question</p>
@@ -34,6 +38,16 @@ export default function Rules(props) {
       setAnswer(e.target.value);
    };
    const handleAddQuestion = () => {
+      if (!questionDescripiton || !opiton1 || !opiton2 || !opiton3 || !opiton4 || !answer) {
+         alert('Vui lòng điền đầy đủ thông tin cho câu hỏi.');
+         return;
+      }
+
+      if (answer > 5 || answer < 0) {
+         setEditAnswer('Đáp án đúng trị có giá trị từ 1 đến 4');
+         return;
+      }
+
       const questionData = {
          questionDescripiton,
          opiton1,
@@ -73,6 +87,8 @@ export default function Rules(props) {
                </div>
             </div>
             <div className="question__options">
+               <p className="mb-[-3px] mt-2 text-[#1e90ff] font-medium	"> Đáp án</p>
+
                <Input
                   placeholder="Đáp án 1"
                   className="input option"
@@ -101,8 +117,9 @@ export default function Rules(props) {
                   onChange={handleOption4}
                   style={{ margin: '10 5px' }}
                />
+               <p className="m-[15px_0_0_0] text-[#3eb43e] font-medium	">Đáp án đúng</p>
                <Input
-                  placeholder="Chọn đáp án đúng(VD: 1 hoặc 1, 2, 3)"
+                  placeholder="Chọn đáp án đúng(1 hoặc 2, 3, 4)"
                   type="number"
                   className="input option"
                   value={answer}
@@ -111,6 +128,7 @@ export default function Rules(props) {
                   min={1}
                   max={4}
                />
+               <p className="text-red-700">{editAnswer}</p>
             </div>
          </div>
       </>

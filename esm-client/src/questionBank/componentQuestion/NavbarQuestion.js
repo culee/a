@@ -4,9 +4,9 @@ import '../addQuestion/addquestion.css';
 
 const NavbarQuestion = () => {
    return (
-      <div className="ml-5 mt-5">
+      <div className="ml-5 pt-3">
          <nav className="nav-list-question text-center">
-            <ul>
+            <ul className="flex gap-2 w-full m-auto">
                <li>
                   <Link to="/add-question">Thêm câu hỏi vào QuestionBank</Link>
                </li>
@@ -14,7 +14,10 @@ const NavbarQuestion = () => {
                   <Link to="/list-question">Danh sách các câu hỏi</Link>
                </li>
                <li>
-                  <Link to="/list-exam-bank">Danh sách thi thử</Link>
+                  <Link to="/add-exam-bank">Tạo các đề thi mẫu</Link>
+               </li>
+               <li>
+                  <Link to="/list-exam-bank">Danh sách các đề thi mẫu</Link>
                </li>
             </ul>
          </nav>

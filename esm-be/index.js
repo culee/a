@@ -4,6 +4,9 @@ const user = require('./routes/user');
 const teacher = require('./routes/teacher');
 const student = require('./routes/student');
 const questions = require('./routes/questions');
+
+const exams = require('./routes/exams');
+
 const InitiateMongoServer = require('./config/db');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -34,6 +37,7 @@ app.use('/user', user);
 app.use('/teacher', teacher);
 app.use('/student', student);
 app.use('/question', questions);
+app.use('/exams', exams);
 
 if (process.env.NODE_ENV === 'production') {
    // Serve any static files
@@ -46,7 +50,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.get('/', function (req, res) {
    res.send('Hello World');
-})
+});
 
 app.listen(PORT, (req, res) => {
    console.log(`Server Started at PORT ${PORT}`);

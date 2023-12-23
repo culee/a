@@ -4,11 +4,16 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 
 export default function Rules(props) {
    const [questionDescripiton, setQuestionDescripiton] = useState('');
+
    const [opiton1, setOption1] = useState('');
    const [opiton2, setOption2] = useState('');
    const [opiton3, setOption3] = useState('');
    const [opiton4, setOption4] = useState('');
+
    const [answer, setAnswer] = useState('');
+   const [editAnswer, setEditAnswer] = useState('');
+   const [terms, setTerms] = useState('');
+
    const [level, setLevel] = useState('');
 
    const submitInput = (
@@ -39,10 +44,25 @@ export default function Rules(props) {
    const handleLevel = (value) => {
       setLevel(value);
    };
+
+   const handleTems = (e) => {
+      setTerms(e.target.value);
+   };
    const handleAddQuestion = () => {
+      if (!questionDescripiton || !level || !opiton1 || !opiton2 || !opiton3 || !opiton4 || !answer || !terms) {
+         alert('Vui lòng điền đầy đủ thông tin cho câu hỏi.');
+         return;
+      }
+
+      if (answer > 5 || answer < 0) {
+         setEditAnswer('Đáp án đúng trị có giá trị từ 1 đến 4');
+         return;
+      }
+
       const questionData = {
          questionDescripiton,
          level,
+         terms,
          opiton1,
          opiton2,
          opiton3,
@@ -59,6 +79,7 @@ export default function Rules(props) {
       setOption4('');
       setAnswer('');
       setLevel('');
+      setTerms('');
    };
 
    return (
@@ -81,13 +102,24 @@ export default function Rules(props) {
                </div>
             </div>
             <div className="question__options">
-               <div className="w-1/3">
-                  <Select defaultValue="Độ khó" onChange={(value) => handleLevel(value)}>
-                     <Option value="Difficult ">Khó</Option>
-                     <Option value="Medium ">Trung bình</Option>
-                     <Option value="Easy ">Dễ</Option>
-                  </Select>
+               <div className="flex w-2/3">
+                  <div className=" w-2/3">
+                     <Input
+                        placeholder="Danh mục học phần"
+                        value={terms}
+                        onChange={handleTems}
+                        style={{ margin: '10 5px' }}
+                     />
+                  </div>
+                  <div className="ml-3 w-1/3">
+                     <Select defaultValue="Độ khó" onChange={(value) => handleLevel(value)}>
+                        <Option value="Difficult ">Khó</Option>
+                        <Option value="Medium ">Trung bình</Option>
+                        <Option value="Easy ">Dễ</Option>
+                     </Select>
+                  </div>
                </div>
+               <p className="mb-[-3px] mt-2 text-[#1e90ff] font-medium	"> Đáp án</p>
                <Input
                   placeholder="Đáp án 1"
                   className="input option"
@@ -116,16 +148,18 @@ export default function Rules(props) {
                   onChange={handleOption4}
                   style={{ margin: '10 5px' }}
                />
+               <p className="mb-[-3px] mt-2 text-[#3eb43e] font-medium	"> Đáp án đúng</p>
                <Input
                   placeholder="Chọn đáp án đúng(VD: 1 hoặc 1, 2, 3)"
                   type="number"
                   className="input option"
                   value={answer}
                   onChange={handleAnswer}
-                  style={{ margin: '10 5px' }}
+                  style={{ margin: '' }}
                   min={1}
                   max={4}
                />
+               <p className="text-red-700">{editAnswer}</p>
             </div>
          </div>
       </>

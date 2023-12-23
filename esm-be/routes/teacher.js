@@ -200,7 +200,8 @@ router.put('/update-test/:testid', auth, async (req, res) => {
 });
 
 router.post('/create-test-temp', auth, async (req, res) => {
-   const { teacherId, testName, category, minutes, rules, className, outOfMarks, answers, questions, section, startTime } =
+   const { teacherId, testName, category, minutes, rules, className, outOfMarks, 
+      answers, questions, section, startTime } =
       req.body;
    try {
       let createTest = new TestTemp({

@@ -44,7 +44,7 @@ function Login(props) {
                      rules={[
                         {
                            required: true,
-                           message: 'Please input your email!',
+                           message: 'Vui lòng nhập email của bạn!',
                         },
                      ]}
                   >
@@ -56,7 +56,7 @@ function Login(props) {
                      rules={[
                         {
                            required: true,
-                           message: 'Please input your password!',
+                           message: 'Vui lòng nhập password của bạn!',
                         },
                      ]}
                   >
