@@ -35,6 +35,7 @@
    margin-top: 5px;
    margin-bottom: 5px;
 }
+
 .container-choose {
    text-align: center;
    margin-top: 3rem;
@@ -54,4 +55,14 @@
    margin: 20px 0;
    font-size: 20px;
    border-radius: 5px;
+}
+
+.start-time-box {
+   display: flex;
+   align-items: center;
+}
+
+
+.time-picker {
+   width: 100%
 }

@@ -68,6 +68,7 @@
         flex-direction: column;
         margin: 25px 0;
     }
+
     .ems__logo {
         max-width: 250px;
     }
@@ -77,12 +78,15 @@
     .navigation__instructions {
         max-width: 90%;
     }
+
     .test__info {
         max-width: 80%;
     }
+
     .btn-instructions {
         flex: 0.1;
     }
+
     .button__description {
         flex: 0.7;
     }
