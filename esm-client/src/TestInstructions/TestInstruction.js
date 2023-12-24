@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Row, Modal, Col, Button } from 'antd';
+import { Row, Modal, Col, Button, notification } from 'antd';
 import { connect } from 'react-redux';
 import './TestInstruction.css';
 import { FaArrowCircleRight } from 'react-icons/fa';
@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 function TestInstruction(props) {
    const history = useHistory();
    const timer = useRef(0);
+   const timerEnd = useRef(0);
    const { confirm } = Modal;
    const { tests } = props;
    const [disabledBtn, setDisabledBtn] = useState(true);
@@ -18,9 +19,9 @@ function TestInstruction(props) {
       questions,
       minutes,
       category,
-      className,
       testName,
       startTime,
+      endAt,
       rules,
       _id: testID,
    } = props.selectedTest;
@@ -77,10 +78,42 @@ function TestInstruction(props) {
       }, 1000);
    }, [startTime]);
 
+   // check for endAt, if have endAt time,  this item will be hidden on list
+   useEffect(() => {
+      if (!endAt) {
+         return;
+      }
+      if (timerEnd.current) {
+         window.clearInterval(timerEnd.current);
+      }
+      const checkTime = () => {
+         const duration = new Date(endAt).getTime() - new Date().getTime();
+         if (duration <= 0) {
+            window.clearInterval(timerEnd.current);
+            setDisabledBtn(true);
+            notification['error']({
+               message: 'Hết thời gian có thể bắt đầu làm bài',
+               description: 'ERROR',
+               duration: 3,
+            });
+            window.setTimeout(() => {
+               history.push('/attempt-test');
+            }, 3000);
+         }
+      };
+      checkTime();
+      timerEnd.current = window.setInterval(() => {
+         checkTime();
+      }, 1000); // check time every 1s
+   }, [endAt, history]);
+
    useEffect(() => {
       return () => {
          if (timer.current) {
             window.clearInterval(timer.current);
+         }
+         if (timerEnd.current) {
+            window.clearInterval(timerEnd.current);
          }
       };
    }, []);

@@ -32,7 +32,6 @@ const TestTempSchema = mongoose.Schema({
    assignedTo: {
       type: Array,
    },
- 
    attempted: {
       type: Boolean,
    },
@@ -40,6 +39,9 @@ const TestTempSchema = mongoose.Schema({
       type: Array,
    },
    startTime: {
+      type: Date,
+   },
+   endAt: {
       type: Date,
    },
 });
