@@ -5,6 +5,8 @@ import './TestInstruction.css';
 import { FaArrowCircleRight } from 'react-icons/fa';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
+import dayjs from 'dayjs';
+import { parseDate } from '../lib';
 
 function TestInstruction(props) {
    const history = useHistory();
@@ -14,6 +16,9 @@ function TestInstruction(props) {
    const { tests } = props;
    const [disabledBtn, setDisabledBtn] = useState(true);
    const [restTime, setRestTime] = useState('00:00:00');
+
+   const [showEndAt, setShowEndAt] = useState('00:00:00');
+
    const {
       outOfMarks,
       questions,
@@ -88,6 +93,7 @@ function TestInstruction(props) {
       }
       const checkTime = () => {
          const duration = new Date(endAt).getTime() - new Date().getTime();
+
          if (duration <= 0) {
             window.clearInterval(timerEnd.current);
             setDisabledBtn(true);
@@ -99,8 +105,19 @@ function TestInstruction(props) {
             window.setTimeout(() => {
                history.push('/attempt-test');
             }, 3000);
+         } else {
+            const hours = Math.floor(duration / 3600000);
+            const minutes = Math.floor((duration % 3600000) / 60000);
+            const seconds = Math.floor((duration % 60000) / 1000);
+
+            const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds
+               .toString()
+               .padStart(2, '0')}`;
+
+            setShowEndAt(formattedTime);
          }
       };
+
       checkTime();
       timerEnd.current = window.setInterval(() => {
          checkTime();
@@ -127,7 +144,7 @@ function TestInstruction(props) {
                      <Row justify="center">
                         <Col className="gutter-row" xs={24} sm={24} md={12} xl={12}>
                            <div className="instructions__wrapper__left">
-                              <p className="instructions__heading">Test Instructions</p>
+                              <p className="instructions__heading">Exam Instructions</p>
                               <div className="test__info">
                                  <div className="test__subheadings">
                                     <div className="test__fields">Môn:</div>
@@ -153,15 +170,9 @@ function TestInstruction(props) {
                                     <div className="test__fields">Tổng điểm:</div>
                                     <div className="test__fields__Value">{outOfMarks}</div>
                                  </div>
-                              </div>
-                              <div className="test__instructions">
-                                 <p className="test__instructions__subheading">Hướng dẫn</p>
-                                 <div className="instructions">
-                                    {testRules?.map((rule, index) => (
-                                       <p className="rule" key={index}>
-                                          <FaArrowCircleRight /> <span className="rule__description">{rule.value}</span>
-                                       </p>
-                                    ))}
+                                 <div className="test__subheadings">
+                                    <div className="test__fields">Thời gian bài thi bị ẩn:</div>
+                                    <div className="test__fields__Value">{showEndAt}</div>
                                  </div>
                               </div>
                            </div>
@@ -171,7 +182,7 @@ function TestInstruction(props) {
                               <div className="ems__log__wrapper">
                                  <img src="/ems-logo.png" className="ems__logo" alt="ems-logo" />
                               </div>
-                              <p className="navigation__instructions__heading">Các nút</p>
+                              <p className="navigation__instructions__heading">Hướng dẫn các nút</p>
                               <div className="navigation__instructions">
                                  <div className="navigation__buttons__Feature">
                                     <Button
