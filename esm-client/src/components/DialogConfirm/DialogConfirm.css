@@ -1,45 +1,44 @@
-/* dialog-confirm -> dc */
 .dc_backdrop {
-    background-color: #cccccc69;
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+   background-color: #cccccc69;
+   position: fixed;
+   inset: 0;
+   z-index: 1000;
+   display: flex;
+   align-items: center;
+   justify-content: center;
 }
 
 .dc_dialog-container {
-    width: calc(100vw - 64px);
-    max-width: 400px;
-    max-height: calc(100vh - 64px);
-    border-radius: 5px;
-    box-shadow: 0px 0px 4px 6px #adabb8;
-    background: #fff;
-    max-height: calc(100vh - 64px);
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
+   width: calc(100vw - 64px);
+   max-width: 400px;
+   max-height: calc(100vh - 64px);
+   border-radius: 5px;
+   box-shadow: 0px 0px 4px 6px #adabb8;
+   background: #fff;
+   max-height: calc(100vh - 64px);
+   overflow: auto;
+   display: flex;
+   flex-direction: column;
 }
 
 .dc_dialog-title {
-    padding: 16px;
-    font-size: 20px;
-    font-weight: 700;
-    padding: 16px;
-    border-bottom: 1px solid #ccc;
+   padding: 16px;
+   font-size: 20px;
+   font-weight: 700;
+   padding: 16px;
+   border-bottom: 1px solid #ccc;
 }
 
 .dc_dialog-content {
-    flex: 1;
-    padding: 32px 16px
+   flex: 1;
+   padding: 32px 16px;
 }
 
 .dc_dialog-actions {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    border-top: 1px solid #ccc;
-    padding: 16px;
-    gap: 16px
+   display: flex;
+   align-items: center;
+   justify-content: end;
+   border-top: 1px solid #ccc;
+   padding: 16px;
+   gap: 16px;
 }
