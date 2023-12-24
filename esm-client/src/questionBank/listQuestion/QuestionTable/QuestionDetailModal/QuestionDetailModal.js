@@ -204,7 +204,7 @@ const QuestionDetailModal = ({ data, onClose, onUpdateSuccess }) => {
                         </Select>
                      </Form.Item>
                   </div>
-                  <p className="primary-wihtoutFont mt-2 font-medium">Danh mục</p>
+                  <p className="primary-wihtoutFont mt-2 font-medium">Chủ đề</p>
                   <div className="">
                      <Form.Item name="terms" disabled={isDisableInputField}>
                         <Input.TextArea

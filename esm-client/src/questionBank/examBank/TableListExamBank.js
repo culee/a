@@ -56,70 +56,14 @@ const TableListExamBank = ({ dataListExambank }) => {
       }
    }, [dataListExambank]);
 
-   // const countQuestionsByLevel = (listQuestion, level) => {
-   //    if (!listQuestion || !Array.isArray(listQuestion)) {
-   //       return 0;
-   //    }
+   const countQuestionsByLevel = (questions, level) => {
+      return questions.filter((question) => question.level.trim().toLowerCase() === level.trim().toLowerCase()).length;
+   };
 
-   //    let count = 0;
+   const countEasyQuestions = (questions) => countQuestionsByLevel(questions, 'Easy');
+   // const countDifficultQuestions = (questions) => countQuestionsByLevel(questions, 'Difficult');
+   // const countMediumQuestions = (questions) => countQuestionsByLevel(questions, 'Medium');
 
-   //    listQuestion.forEach((exam) => {
-   //       if (exam.options && Array.isArray(exam.options)) {
-   //          exam.options.forEach((question) => {
-   //             if (question.level && question.level.trim().toLowerCase() === level.trim().toLowerCase()) {
-   //                count += 1;
-   //             }
-   //          });
-   //       }
-   //    });
-
-   //    return count;
-   // };
-
-   // function countQuestionsLevel(data) {
-   //    // Khởi tạo biến đếm cho mỗi level
-   //    let easyCount = 0;
-   //    let difficultCount = 0;
-   //    let mediumCount = 0;
-
-   //    // Lặp qua mảng data để đếm số câu hỏi của từng level
-   //    data.forEach((item) => {
-   //       item.questions.forEach((question) => {
-   //          switch (question.level.trim().toLowerCase()) {
-   //             case 'easy':
-   //                easyCount++;
-   //                break;
-   //             case 'difficult':
-   //                difficultCount++;
-   //                break;
-   //             case 'medium':
-   //                mediumCount++;
-   //                break;
-   //             default:
-   //                // Nếu level không thuộc "Easy", "Difficult", hoặc "Medium", có thể xử lý thêm nếu cần
-   //                break;
-   //          }
-   //       });
-   //    });
-
-   //    // Trả về một đối tượng chứa số câu hỏi của từng level
-   //    return {
-   //       easy: easyCount,
-   //       difficult: difficultCount,
-   //       medium: mediumCount,
-   //    };
-   // }
-
-   // const questionCounts = countQuestionsLevel(dataList.questions);
-
-   function countQuestionsByLevel(testData, level) {
-      return testData?.filter((question) => question.level.toLowerCase().trim() === level.toLowerCase().trim()).length;
-   }
-
-   // const filterLevel = (listQuestion, level) => {
-   //    let count = 0;
-   //    for(let i =0; i < )
-   // };
    return (
       <div>
          <DialogConfirm
@@ -195,7 +139,8 @@ const TableListExamBank = ({ dataListExambank }) => {
                                  <p className="">{item.answers.length}</p>
                               </td>
                               <td className="qt_item min-w-16">
-                                 <p className="">{countQuestionsByLevel(dataList.item, 'Easy')}</p>
+                                 {/* <p className="">{(questions) => countQuestionsByLevel(questions, 'Easy')}</p> */}
+                                 <p>{countEasyQuestions}</p>
                               </td>
                               <td className="qt_item min-w-20">
                                  {/* <p className="">{countQuestionsByLevel(dataList.item, 'Medium')}</p> */}

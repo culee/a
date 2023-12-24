@@ -101,7 +101,7 @@ const QuestionTable = ({ list }) => {
                      <p className="qt_header-item">Khối</p>
                   </div>
                   <div className="qt_item min-w-20	">
-                     <p className="qt_header-item">Danh mục</p>
+                     <p className="qt_header-item">Chủ đề</p>
                   </div>
                   <div className="qt_item min-w-20	">
                      <p className="qt_header-item">Độ khó</p>

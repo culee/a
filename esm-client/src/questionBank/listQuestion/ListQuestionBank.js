@@ -78,7 +78,7 @@ const ListExamQuestionBank = ({ fetchDataQuestion }) => {
                            </Select>
                         </Form.Item>
                         <Form.Item name="terms">
-                           <Input placeholder="Danh mục" onChange={(value) => setTerms(value.target.value)} />
+                           <Input placeholder="Chủ đề" onChange={(value) => setTerms(value.target.value)} />
                         </Form.Item>
 
                         <Form.Item>

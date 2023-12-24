@@ -105,7 +105,7 @@ export default function Rules(props) {
                <div className="flex w-2/3">
                   <div className=" w-2/3">
                      <Input
-                        placeholder="Danh mục học phần"
+                        placeholder="Chủ đề"
                         value={terms}
                         onChange={handleTems}
                         style={{ margin: '10 5px' }}
