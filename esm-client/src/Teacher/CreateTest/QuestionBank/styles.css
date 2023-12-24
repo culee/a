@@ -1,0 +1,49 @@
+/* 
+* ques  -question bank
+*/
+
+.ques_backdrop {
+    background-color: #cccccc69;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ques_dialog-container {
+    width: calc(100vw - 64px);
+    max-width: 400px;
+    max-height: calc(100vh - 64px);
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px 6px #adabb8;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.ques_dialog-title {
+    padding: 16px;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 16px;
+    border-bottom: 1px solid #ccc;
+}
+
+.ques_dialog-content {
+    flex: 1;
+    padding: 4px 8px;
+    max-height: calc(100vh - 200px);
+    overflow: auto;
+}
+
+.ques_dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    border-top: 1px solid #ccc;
+    padding: 16px;
+    gap: 16px;
+}

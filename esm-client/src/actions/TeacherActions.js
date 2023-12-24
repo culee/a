@@ -54,8 +54,6 @@ const setTestCreatedFalse = () => {
 };
 
 export const submitTest = (values) => (dispatch) => {
-   console.log(values);
-
    dispatch(requestSubmitTest());
 
    const requestOptions = {
@@ -67,13 +65,11 @@ export const submitTest = (values) => (dispatch) => {
 
       body: JSON.stringify(values),
    };
-   //console.log("Success:", values);
    fetch('/teacher/create-test', requestOptions)
       .then((response) => response.json())
       .then((data) => {
          if (data?.error?.name === 'TokenExpiredError') {
             dispatch(logoutUser());
-            console.log(data.user);
          } else {
             dispatch(receiveSubmitTest(data.user));
          }

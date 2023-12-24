@@ -1,91 +1,81 @@
 import './index.css';
-import React, { useCallback, useState, useEffect } from 'react';
-import { Row, Col, Form, Input, Button, Select, notification, TimePicker, DatePicker } from 'antd';
+import React, { useCallback, useState } from 'react';
+import { Row, Col, Form, Input, Select, notification, TimePicker, DatePicker } from 'antd';
 import './index.css';
-import axios from 'axios';
-
-import { useAddListExam } from '../../useContext/Context';
+import ExamBank from './ExamBank/ExamBank';
+import SelectedQuestion from './SelectedQuestion/SelectedQuestion';
+import { useDispatch, useSelector } from 'react-redux';
+import { submitTest } from '../../actions/TeacherActions';
+import QuestionBank from './QuestionBank/QuestionBank';
 
 function QuestionBankCreateTest() {
+   const [form] = Form.useForm();
+   const dispatch = useDispatch();
+   const teacherId = useSelector((state) => state.auth.profileID);
    const { Option } = Select;
-
-   const { showListAddQuestionBank, setShowListAddQuestionBank } = useAddListExam();
-
-   const { showListAddExamBank, setShowListAddExamBank } = useAddListExam();
-
+   const [isLoading, setIsLoading] = useState(false);
+   const [isOpenExamBank, setIsOpenExamBank] = useState(false);
+   const [isOpenQuestionBank, setIsOpenQuestionBank] = useState(false);
+   const [selectedQuestionData, setSelectedQuestionData] = useState(null);
+   console.log(selectedQuestionData);
    const [testName, setTestName] = useState();
    const [className, setClassName] = useState();
 
-   console.log(testName, 'testName');
-   console.log(className, 'className');
+   const submitForm = useCallback(
+      async (values) => {
+         const { testName, category, className, section, minutes, outOfMarks } = values;
+         const startTime = `${values.startDate.format('YYYY-MM-DD')}T${values.startTime.format('HH:mm:ss')}`;
 
-   const handleSubmit = () => {};
+         const sendData = {
+            teacherId,
+            testName,
+            category,
+            className,
+            section,
+            rules: [],
+            testCreated: false,
+            minutes,
+            outOfMarks,
+            questions: [],
+            answers: [],
+            startTime,
+         };
 
-   ///Call API list Exam
-   const fetchDataListExamBank = useCallback(
-      async (searchWithParams = true) => {
-         try {
-            const response = await axios.get('/exams/test-temp/search', {
-               params: searchWithParams
-                  ? {
-                       testName,
-                       className,
-                    }
-                  : {},
-               headers: {
-                  Authorization: localStorage.getItem('token'),
-               },
-            });
-
-            const data = response.data;
-            setShowListAddExamBank(data.obj);
-         } catch (error) {
-            console.error('Error fetching data:', error);
+         if (selectedQuestionData) {
+            sendData.questions = selectedQuestionData.questions;
+            sendData.answers = selectedQuestionData.answers;
          }
-      },
-      [testName, className],
-   );
 
-   const HandleShowlistExamBank = async () => {
-      setTestName();
-      setClassName();
-      fetchDataListExamBank();
-   };
-
-   console.log(showListAddExamBank);
-
-   ///Call API list question bank
-   const fetchDataListQuestionBank = useCallback(
-      async (searchWithParams = true) => {
-         try {
-            const response = await axios.get('/question/search', {
-               params: searchWithParams
-                  ? {
-                       testName,
-                       className,
-                    }
-                  : {},
-               headers: {
-                  Authorization: localStorage.getItem('token'),
-               },
-            });
-
-            const data = response.data;
-            setShowListAddQuestionBank(data.obj);
-         } catch (error) {
-            console.error('Error fetching data:', error);
+         if (values.endDate) {
+            sendData.endAt = `${values.endDate.format('YYYY-MM-DD')}T${values.endTime.format('HH:mm:ss')}`;
          }
+
+         setIsLoading(true);
+         dispatch(submitTest(sendData));
+         notification['success']({
+            message: 'Tạo bài kiểm tra thành công.',
+            description: 'SUCCESS',
+            duration: 3,
+         });
+         setIsLoading(false);
+         form.resetFields([
+            'testName',
+            'className',
+            'section',
+            'category',
+            'outOfMarks',
+            'minutes',
+            'startTime',
+            'startDate',
+            'endTime',
+            'endDate',
+         ]);
+         setClassName('');
+         setTestName('');
+         setSelectedQuestionData(null);
       },
-      [testName, className],
+      [selectedQuestionData, teacherId, dispatch, submitTest],
    );
-
-   const HandleShowlistQuestionbank = async () => {
-      setTestName();
-      setClassName();
-      fetchDataListQuestionBank();
-   };
-
-   console.log(showListAddQuestionBank);
 
    return (
       <>
@@ -93,12 +83,13 @@ function QuestionBankCreateTest() {
             <Col xs={22} sm={22} md={10} lg={10} className="signup__container">
                <p className="sub-title__signup"> 🎓 Bài kiểm tra</p>
                <Form
+                  form={form}
                   name="basic"
                   className="create__test__form"
                   initialValues={{
                      remember: true,
                   }}
-                  onSubmit={handleSubmit}
+                  onFinish={submitForm}
                >
                   <div className="element__wrapper">
                      <Form.Item name="testName" rules={[{ required: true, message: 'Hãy chọn môn!' }]}>
@@ -172,32 +163,78 @@ function QuestionBankCreateTest() {
                         <DatePicker placeholder="Chọn ngày" className="time-picker" />
                      </Form.Item>
                   </div>
-
+                  <p className="primary-wihtoutFont mt-2 font-" style={{ fontWeight: '500' }}>
+                     Thời gian kết thức
+                  </p>
+                  <div className="start-time-box">
+                     <Form.Item name="endTime">
+                        <TimePicker placeholder="Chọn thời gian" className="time-picker" />
+                     </Form.Item>
+                     <Form.Item name="endDate">
+                        <DatePicker placeholder="Chọn ngày" className="time-picker" />
+                     </Form.Item>
+                  </div>
                   <div className="flex">
                      <div className=" mt-2 bg-[#2b62a0] text-white w-2/5 text-center rounded">
-                        <button className="p-1" onClick={HandleShowlistExamBank}>
+                        <button type="button" className="p-1" onClick={() => setIsOpenExamBank((value) => !value)}>
                            Chọn đề thi có sẵn
                         </button>
                      </div>
                      <div className="ml-4 mt-2 bg-[#2b62a0] text-white w-3/5 text-center rounded">
-                        <button className="p-1" onClick={HandleShowlistQuestionbank}>
+                        <button type="button" className="p-1" onClick={() => setIsOpenQuestionBank((value) => !value)}>
                            Chọn câu hỏi trong ngân hàng
                         </button>
                      </div>
                   </div>
 
-                  {/* <Form.Item>
-                     <Button
-                        type="primary"
-                        loading={this.state.isLoading}
-                        className="sign__up"
-                        htmlType="submit"
-                        disabled={this.state.questions.length < 1 ? true : false}
+                  {!!selectedQuestionData && !!selectedQuestionData.questions && (
+                     <>
+                        <div className="flex justify-center">
+                           <button
+                              className={`mt-2 text-white text-center rounded p-2 w-full ${
+                                 isLoading ? 'pointer-events-none bg-[#ccc]' : 'bg-[#2b62a0]'
+                              }`}
+                              type="submit"
+                           >
+                              Hoàn tất
+                           </button>
+                        </div>
+                        {selectedQuestionData.questions.map((item, index) => (
+                           <SelectedQuestion
+                              data={{
+                                 index,
+                                 description: item.description,
+                                 options: item.options,
+                                 answer: selectedQuestionData.answers[index],
+                              }}
+                           />
+                        ))}
+                     </>
+                  )}
+
+                  <div className="flex justify-center">
+                     <button
+                        className={`mt-2 text-white text-center rounded p-2 w-full ${
+                           isLoading ? 'pointer-events-none bg-[#ccc]' : 'bg-[#2b62a0]'
+                        }`}
+                        type="submit"
                      >
-                        {this.state.isLoading ? 'Loading...' : 'Hoàn Tất'}
-                     </Button>
-                  </Form.Item> */}
+                        Hoàn tất
+                     </button>
+                  </div>
                </Form>
+               <ExamBank
+                  isOpen={isOpenExamBank}
+                  searchParams={{ testName, className }}
+                  onClose={() => setIsOpenExamBank(false)}
+                  onSelected={setSelectedQuestionData}
+               />
+               <QuestionBank
+                  isOpen={isOpenQuestionBank}
+                  searchParams={{ testName, className }}
+                  onClose={() => setIsOpenQuestionBank(false)}
+                  onSelected={(data) => setSelectedQuestionData(data)}
+               />
             </Col>
          </Row>
       </>

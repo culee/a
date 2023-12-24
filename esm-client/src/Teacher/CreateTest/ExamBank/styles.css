@@ -1,0 +1,49 @@
+/* 
+* ex - exam bank
+*/
+
+.ex_backdrop {
+    background-color: #cccccc69;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ex_dialog-container {
+    width: calc(100vw - 64px);
+    max-width: 400px;
+    max-height: calc(100vh - 64px);
+    border-radius: 5px;
+    box-shadow: 0px 0px 4px 6px #adabb8;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.ex_dialog-title {
+    padding: 16px;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 16px;
+    border-bottom: 1px solid #ccc;
+}
+
+.ex_dialog-content {
+    flex: 1;
+    padding: 16px 0;
+    max-height: calc(100vh - 130px);
+    overflow: auto;
+}
+
+.ex_dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    border-top: 1px solid #ccc;
+    padding: 16px;
+    gap: 16px;
+}

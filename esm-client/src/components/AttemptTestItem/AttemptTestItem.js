@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 /**
  *
@@ -32,95 +32,92 @@ import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
  */
 
 const AttemptTestItem = ({ isSelected, data, onClick, onHiddenOnList }) => {
-    const [readyToStart, setReadyToStart] = useState(false);
-    const timer = useRef(0);
-    const timerEnd = useRef(0);
-    const timeFormat = useMemo(() => {
-        if (!data.startTime) {
-            return '';
-        }
-        const date = new Date(data.startTime);
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
+   const [readyToStart, setReadyToStart] = useState(false);
+   const timer = useRef(0);
+   const timerEnd = useRef(0);
+   const timeFormat = useCallback((time) => {
+      if (!time) {
+         return '';
+      }
+      const date = new Date(time);
+      const day = date.getDate();
+      const month = date.getMonth() + 1;
+      const year = date.getFullYear();
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
 
-        const formattedDate = `${hours} giờ ${minutes} phút, ngày ${day} tháng ${month} năm ${year}`;
+      const formattedDate = `${hours} giờ ${minutes} phút, ngày ${day} tháng ${month} năm ${year}`;
 
-        return formattedDate;
-    }, [data]);
+      return formattedDate;
+   }, []);
 
-    useEffect(() => {
-        if (!data.startTime) {
-            return;
-        }
-        if (timer.current) {
+   useEffect(() => {
+      if (!data.startTime) {
+         return;
+      }
+      if (timer.current) {
+         window.clearInterval(timer.current);
+      }
+      const checkTime = () => {
+         const duration = new Date(data.startTime).getTime() - new Date().getTime();
+         setReadyToStart(duration <= 0);
+         if (duration <= 0) {
             window.clearInterval(timer.current);
-        }
-        const checkTime = () => {
-            const duration =
-                new Date(data.startTime).getTime() - new Date().getTime();
-            setReadyToStart(duration <= 0);
-            if (duration <= 0) {
-                window.clearInterval(timer.current);
-            }
-        };
+         }
+      };
 
-        checkTime();
-        timer.current = window.setInterval(() => {
-            checkTime();
-        }, 10000); // check time every 10s
-    }, [data.startTime]);
+      checkTime();
+      timer.current = window.setInterval(() => {
+         checkTime();
+      }, 10000); // check time every 10s
+   }, [data.startTime]);
 
-    // check for endAt, if have endAt time,  this item will be hidden on list
-    useEffect(() => {
-        if (!data.endAt || !onHiddenOnList) {
-            return;
-        }
-        if (timerEnd.current) {
+   // check for endAt, if have endAt time,  this item will be hidden on list
+   useEffect(() => {
+      if (!data.endAt || !onHiddenOnList) {
+         return;
+      }
+      if (timerEnd.current) {
+         window.clearInterval(timerEnd.current);
+      }
+      const checkTime = () => {
+         const duration = new Date(data.endAt).getTime() - new Date().getTime();
+         if (duration <= 0) {
+            onHiddenOnList(data._id);
             window.clearInterval(timerEnd.current);
-        }
-        const checkTime = () => {
-            const duration =
-                new Date(data.endAt).getTime() - new Date().getTime();
-            if (duration <= 0) {
-                onHiddenOnList(data._id);
-                window.clearInterval(timerEnd.current);
-            }
-        };
-        checkTime();
-        timerEnd.current = window.setInterval(() => {
-            checkTime();
-        }, 10000); // check time every 10s
-    }, [data.endAt]);
+         }
+      };
+      checkTime();
+      timerEnd.current = window.setInterval(() => {
+         checkTime();
+      }, 10000); // check time every 10s
+   }, [data.endAt]);
 
-    useEffect(() => {
-        return () => {
-            if (timer.current) {
-                window.clearInterval(timer.current);
-            }
-            if (timerEnd.current) {
-                window.clearInterval(timerEnd.current);
-            }
-        };
-    }, []);
+   useEffect(() => {
+      return () => {
+         if (timer.current) {
+            window.clearInterval(timer.current);
+         }
+         if (timerEnd.current) {
+            window.clearInterval(timerEnd.current);
+         }
+      };
+   }, []);
 
-    return (
-        <div
-            className={`test__wrapper ${isSelected ? 'selected__test' : ''}`}
-            onClick={() => {
-                onClick(data._id);
-            }}
-        >
-            <p className='select__test'>{data.testName}</p>
-            <div className='test__time'>
-                <p className={`time ${readyToStart ? 'start' : 'end'}`}>
-                    Bắt đầu: {timeFormat}
-                </p>
-            </div>
-        </div>
-    );
+   return (
+      <div
+         className={`test__wrapper ${isSelected ? 'selected__test' : ''}`}
+         onClick={() => {
+            onClick(data._id);
+         }}
+      >
+         <p className="select__test">{data.testName}</p>
+         <div className="test__time">
+            <p className={`time ${readyToStart ? 'start' : 'end'}`}>Bắt đầu: {timeFormat(data.startTime)}</p>
+            {data.endAt && <p className="end">Kết thúc: {timeFormat(data.endAt)}</p>}
+         </div>
+      </div>
+   );
 };
 
 export default memo(AttemptTestItem);

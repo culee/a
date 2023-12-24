@@ -1,0 +1,9 @@
+.exi_container {
+    cursor: pointer;
+    padding: 16px;
+    margin-bottom: 4px;
+}
+
+.exi_container:hover {
+    background-color: #cccccc33;
+}
