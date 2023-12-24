@@ -15,22 +15,20 @@ require('dotenv').config();
 
 router.get('/test-temp', auth, async (req, res) => {
    try {
-      await TestTemp.find({}, 'submitBy className testName section')
-         .exec(function (err, obj) {
-            if (err) {
-               return res.status(400).json({ err });
-            } else {
-               return res.status(200).json({
-                  obj,
-               });
-            }
-         });
+      await TestTemp.find({}, 'submitBy className testName section').exec(function (err, obj) {
+         if (err) {
+            return res.status(400).json({ err });
+         } else {
+            return res.status(200).json({
+               obj,
+            });
+         }
+      });
    } catch (err) {
       console.log(err.message);
       res.status(500).send('Error in fetching Tests');
    }
 });
-
 
 /**
  * @method - GET
@@ -46,18 +44,18 @@ router.get('/tests/:profileID', auth, async (req, res) => {
    if (startTime) {
       query.startTime = { $gte: new Date(startTime) };
    }
+
    console.log('teacher', profileID);
    try {
-      await Test.find(query, 'submitBy className testName section')
-         .exec(function (err, obj) {
-            if (err) {
-               return res.status(400).json({ err });
-            } else {
-               return res.status(200).json({
-                  obj,
-               });
-            }
-         });
+      await Test.find(query, 'submitBy className testName section').exec(function (err, obj) {
+         if (err) {
+            return res.status(400).json({ err });
+         } else {
+            return res.status(200).json({
+               obj,
+            });
+         }
+      });
    } catch (err) {
       console.log(err.message);
       res.status(500).send('Error in fetching Tests');
@@ -124,9 +122,21 @@ router.get('/profile/:profileID', auth, async (req, res) => {
  */
 
 router.post('/create-test', auth, async (req, res) => {
-   const { teacherId, testName, category, minutes, rules, className, outOfMarks, answers, questions, section, startTime } =
-      req.body;
-   console.log(questions, answers, rules);
+   const {
+      teacherId,
+      testName,
+      category,
+      minutes,
+      rules,
+      className,
+      outOfMarks,
+      answers,
+      questions,
+      section,
+      startTime,
+      endAt,
+   } = req.body;
+
    try {
       let createTest = await Test.findOne({
          testName,
@@ -151,7 +161,8 @@ router.post('/create-test', auth, async (req, res) => {
          outOfMarks,
          questions,
          section,
-         startTime //'2023-01-01T12:00:00'
+         startTime, //'2023-01-01T12:00:00'
+         endAt,
       });
 
       let data = await createTest.save();
@@ -200,9 +211,20 @@ router.put('/update-test/:testid', auth, async (req, res) => {
 });
 
 router.post('/create-test-temp', auth, async (req, res) => {
-   const { teacherId, testName, category, minutes, rules, className, outOfMarks, 
-      answers, questions, section, startTime } =
-      req.body;
+   const {
+      teacherId,
+      testName,
+      category,
+      minutes,
+      rules,
+      className,
+      outOfMarks,
+      answers,
+      questions,
+      section,
+      startTime,
+      endAt,
+   } = req.body;
    try {
       let createTest = new TestTemp({
          teacherId,
@@ -215,7 +237,8 @@ router.post('/create-test-temp', auth, async (req, res) => {
          outOfMarks,
          questions,
          section,
-         startTime //'2023-01-01T12:00:00'
+         startTime, //'2023-01-01T12:00:00'
+         endAt,
       });
 
       let data = await createTest.save();

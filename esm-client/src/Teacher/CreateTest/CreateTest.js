@@ -320,6 +320,10 @@ class CreateTest extends Component {
             'YYYY-MM-DD'
         )}T${values.startTime.format('HH:mm:ss')}`;
 
+        const endAt = `${values.endDate.format(
+            'YYYY-MM-DD'
+        )}T${values.endTime.format('HH:mm:ss')}`;
+
         const sendData = {
             teacherId,
             testName,
@@ -333,9 +337,8 @@ class CreateTest extends Component {
             questions,
             answers,
             startTime,
+            endAt,
         };
-
-        console.log(sendData);
 
         this.props.submitTest(sendData);
     };
@@ -532,13 +535,49 @@ class CreateTest extends Component {
                                 Thời gian bắt đầu làm bài
                             </p>
                             <div className='start-time-box'>
-                                <Form.Item name='startTime'>
+                                <Form.Item
+                                    name='startTime'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng nhập thời gian',
+                                        },
+                                    ]}
+                                >
                                     <TimePicker
                                         placeholder='Chọn thời gian'
                                         className='time-picker'
                                     />
                                 </Form.Item>
-                                <Form.Item name='startDate'>
+                                <Form.Item
+                                    name='startDate'
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng nhập ngày',
+                                        },
+                                    ]}
+                                >
+                                    <DatePicker
+                                        placeholder='Chọn ngày'
+                                        className='time-picker'
+                                    />
+                                </Form.Item>
+                            </div>
+                            <p
+                                className='primary-wihtoutFont mt-2 font-'
+                                style={{ fontWeight: '500' }}
+                            >
+                                Thời gian kết thức
+                            </p>
+                            <div className='start-time-box'>
+                                <Form.Item name='endTime'>
+                                    <TimePicker
+                                        placeholder='Chọn thời gian'
+                                        className='time-picker'
+                                    />
+                                </Form.Item>
+                                <Form.Item name='endDate'>
                                     <DatePicker
                                         placeholder='Chọn ngày'
                                         className='time-picker'

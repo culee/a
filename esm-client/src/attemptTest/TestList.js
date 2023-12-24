@@ -10,15 +10,15 @@ export default function TestList(props) {
    const [tests, setTests] = useState([]);
    const [searchTests, setSearchTests] = useState([]);
    const [searching, setSearching] = useState('');
-const [selectedId, setSelectedId] = useState(null); // type null or string
+   const [selectedId, setSelectedId] = useState(null); // type null or string
 
-    // null or test data
-    const selectedData = useMemo(() => {
-        if (!selectedId) {
-            return null;
-        }
-        return tests.find((item) => item._id === selectedId);
-    }, [selectedId, tests]);
+   // null or test data
+   const selectedData = useMemo(() => {
+      if (!selectedId) {
+         return null;
+      }
+      return tests.find((item) => item._id === selectedId);
+   }, [selectedId, tests]);
 
    useEffect(() => {
       setTests(props.tests.reverse());
@@ -28,11 +28,7 @@ const [selectedId, setSelectedId] = useState(null); // type null or string
       if (searchTerm === '') setSearching(searchTerm);
       else {
          setSearching(true);
-         setSearchTests(
-                tests.filter((test) =>
-                    test.testName.toLowerCase().includes(searchTerm)
-                )
-            );
+         setSearchTests(tests.filter((test) => test.testName.toLowerCase().includes(searchTerm)));
       }
    };
 
@@ -42,93 +38,81 @@ const [selectedId, setSelectedId] = useState(null); // type null or string
    }, [selectedData]);
 
    const handleSelectTest = useCallback((id) => {
-        setSelectedId((value) => (value === id ? null : id));
-    }, []);
+      setSelectedId((value) => (value === id ? null : id));
+   }, []);
+
+   const handleHiddenItemOnList = useCallback((id) => {
+      setTests((value) => value.filter((item) => item._id !== id));
+   }, []);
 
    return (
       <>
-         <div className='select__test__wrapper'>
-            <p className='test__wrapper__heading'>Bài kiểm tra</p>
-            <div className='select__test__search__box'>
-               <p className='search__box__heading'>Tìm kiếm</p>
+         <div className="select__test__wrapper">
+            <p className="test__wrapper__heading">Bài kiểm tra</p>
+            <div className="select__test__search__box">
+               <p className="search__box__heading">Tìm kiếm</p>
                {<SearchBox handleListData={handleListData} />}
-               <div className='test__wrapper__body'>
-                  <p className='test__wrapper__heading select__heading'>
-                            Chọn bài kiểm tra
-                        </p>
-                  <div className='select__test__body'>
+               <div className="test__wrapper__body">
+                  <p className="test__wrapper__heading select__heading">Chọn bài kiểm tra</p>
+                  <div className="select__test__body">
                      {tests && tests.length > 0 ? (
                         searching !== '' ? (
                            searchTests.map((test, index) => (
                               <AttemptTestItem
                                  key={`search-test-${index}`}
-                                            data={test}
+                                 data={test}
                                  onClick={handleSelectTest}
-                                            isSelected={selectedId === test._id}
-                                        />
+                                 isSelected={selectedId === test._id}
+                                 onHiddenOnList={handleHiddenItemOnList}
+                              />
                            ))
                         ) : (
                            tests.map((test, index) => (
                               <AttemptTestItem
                                  key={`test-${index}`}
-                                            data={test}
+                                 data={test}
                                  onClick={handleSelectTest}
-                                            isSelected={selectedId === test._id}
-                                        />
+                                 isSelected={selectedId === test._id}
+                                 onHiddenOnList={handleHiddenItemOnList}
+                              />
                            ))
                         )
                      ) : (
-                        <div className='select__skeleton'>
-                           <div className='select__single-skeleton'>
+                        <div className="select__skeleton">
+                           <div className="select__single-skeleton">
                               <Skeleton.Avatar
-                                 className='select__avatar-skelton'
+                                 className="select__avatar-skelton"
                                  active={true}
-                                 size='default'
-                                 shape='square'
+                                 size="default"
+                                 shape="square"
                               />
-                              <Skeleton.Input
-                                            className='select__input-skelton'
-                                            active={true}
-                                            size='default'
-                                        />
+                              <Skeleton.Input className="select__input-skelton" active={true} size="default" />
                            </div>
-                           <div className='select__single-skeleton'>
+                           <div className="select__single-skeleton">
                               <Skeleton.Avatar
-                                 className='select__avatar-skelton'
+                                 className="select__avatar-skelton"
                                  active={true}
-                                 size='default'
-                                 shape='square'
+                                 size="default"
+                                 shape="square"
                               />
-                              <Skeleton.Input
-                                            className='select__input-skelton'
-                                            active={true}
-                                            size='default'
-                                        />
+                              <Skeleton.Input className="select__input-skelton" active={true} size="default" />
                            </div>
-                           <div className='select__single-skeleton'>
+                           <div className="select__single-skeleton">
                               <Skeleton.Avatar
-                                 className='select__avatar-skelton'
+                                 className="select__avatar-skelton"
                                  active={true}
-                                 size='default'
-                                 shape='square'
+                                 size="default"
+                                 shape="square"
                               />
-                              <Skeleton.Input
-                                            className='select__input-skelton'
-                                            active={true}
-                                            size='default'
-                                        />
+                              <Skeleton.Input className="select__input-skelton" active={true} size="default" />
                            </div>
                         </div>
                      )}
                   </div>
                </div>
             </div>
-            <div className='select__button'>
-               <Button
-                        disabled={!selectedId}
-                        type='primary'
-                        onClick={handleButtonClick}
-                    >
+            <div className="select__button">
+               <Button disabled={!selectedId} type="primary" onClick={handleButtonClick}>
                   Continue
                </Button>
             </div>
