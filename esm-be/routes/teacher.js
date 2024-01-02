@@ -37,27 +37,23 @@ router.get('/test-temp', auth, async (req, res) => {
  */
 
 router.get('/tests/:profileID', auth, async (req, res) => {
-   // /tests/:profileID?startTime=2023-01-01T12:00:00
-   const profileID = req.params.profileID;
-   const { startTime } = req.query;
-   const query = { teacherId: profileID };
-   if (startTime) {
-      query.startTime = { $gte: new Date(startTime) };
-   }
-
-   console.log('teacher', profileID);
    try {
+      // /tests/:profileID?startTime=2023-01-01T12:00:00
+      const profileID = req.params.profileID;
+      const { startTime } = req.query;
+      const query = { teacherId: profileID };
+      if (startTime) {
+         query.startTime = { $gte: new Date(startTime) };
+      }
       await Test.find(query, 'submitBy className testName section').exec(function (err, obj) {
          if (err) {
             return res.status(400).json({ err });
-         } else {
-            return res.status(200).json({
-               obj,
-            });
          }
+         return res.status(200).json({
+            obj,
+         });
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in fetching Tests');
    }
 });
@@ -69,19 +65,16 @@ router.get('/tests/:profileID', auth, async (req, res) => {
  */
 
 router.get('/classes', auth, async (req, res) => {
-   console.log('fetch classes');
    try {
       await User.find({}, 'className -_id', function (err, obj) {
          if (err) {
             return res.status(400).json({ err });
-         } else {
-            return res.status(200).json({
-               obj,
-            });
          }
+         return res.status(200).json({
+            obj,
+         });
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in fetching Tests');
    }
 });
@@ -103,14 +96,12 @@ router.get('/profile/:profileID', auth, async (req, res) => {
          .exec(function (err, obj) {
             if (err) {
                return res.status(400).json({ err });
-            } else {
-               return res.status(200).json({
-                  obj,
-               });
             }
+            return res.status(200).json({
+               obj,
+            });
          });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in fetching Student Data');
    }
 });
@@ -138,19 +129,19 @@ router.post('/create-test', auth, async (req, res) => {
    } = req.body;
 
    try {
-      let createTest = await Test.findOne({
+      const isExistedTest = await Test.findOne({
          testName,
          className,
          category,
          section,
       });
-      if (createTest) {
+      if (isExistedTest) {
          return res.status(400).json({
             msg: 'Test Already Created',
          });
       }
 
-      createTest = new Test({
+      const createTest = new Test({
          teacherId,
          testName,
          category,
@@ -171,11 +162,10 @@ router.post('/create-test', auth, async (req, res) => {
          data,
       };
 
-      res.status(200).json({
+      return res.status(200).json({
          payload,
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Saving');
    }
 });
@@ -188,7 +178,7 @@ router.post('/create-test', auth, async (req, res) => {
 
 router.put('/update-test/:testid', auth, async (req, res) => {
    const testID = req.params.testid;
-   console.log(testID);
+
    const questionsData = req.body.questions;
    try {
       const testData = await Test.findOneAndUpdate(
@@ -205,7 +195,6 @@ router.put('/update-test/:testid', auth, async (req, res) => {
          },
       );
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Updating');
    }
 });
@@ -247,11 +236,10 @@ router.post('/create-test-temp', auth, async (req, res) => {
          data,
       };
 
-      res.status(200).json({
+      return res.status(200).json({
          payload,
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Saving');
    }
 });
@@ -315,11 +303,11 @@ router.put('/update-profile/:profileID', auth, async (req, res) => {
 
 /**
  * @method - PUT
- * @param - /assigend-to/:testID
+ * @param - /assigned-to/:testID
  * @description - Fetching classes to which the test assigned using testID
  */
 
-router.put('/assigend-to/:testID', auth, async (req, res) => {
+router.put('/assigned-to/:testID', auth, async (req, res) => {
    const testID = req.params.testID;
    const { className } = req.body;
    try {
@@ -351,19 +339,17 @@ router.put('/assigend-to/:testID', auth, async (req, res) => {
 
 router.delete('/delete-test/:testid', auth, async (req, res) => {
    const testID = req.params.testid;
-   console.log(testID);
+
    try {
-      const testData = await Test.findByIdAndDelete(testID, function (err) {
+      await Test.findByIdAndDelete(testID, function (err) {
          if (err) {
             return res.status(400).json({ message: 'failed to delete document' });
-         } else {
-            return res.status(200).json({
-               message: 'successfully deleted',
-            });
          }
+         return res.status(200).json({
+            message: 'successfully deleted',
+         });
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Deleting');
    }
 });

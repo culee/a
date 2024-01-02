@@ -43,11 +43,10 @@ router.post('/create-test-temp', auth, async (req, res) => {
          data,
       };
 
-      res.status(200).json({
+      return res.status(200).json({
          payload,
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Saving');
    }
 });
@@ -56,23 +55,21 @@ router.put('/update-test-temp/:testTempId', auth, async (req, res) => {
    const testTempId = req.params.testTempId;
    const updateData = req.body;
    try {
-      const testData = await TestTemp.findOneAndUpdate(
+      await TestTemp.findOneAndUpdate(
          { _id: testTempId },
          updateData,
          { new: true }, // Option để trả về dữ liệu đã cập nhật
          function (err, updatedData) {
             if (err) {
                return res.status(400).json({ message: 'Failed to update document' });
-            } else {
-               return res.status(200).json({
-                  data: updatedData,
-                  message: 'Test successfully updated',
-               });
             }
+            return res.status(200).json({
+               data: updatedData,
+               message: 'Test successfully updated',
+            });
          },
       );
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Updating');
    }
 });
@@ -95,14 +92,12 @@ router.get('/test-temp/search', auth, async (req, res) => {
       await TestTemp.find(conditions, function (err, obj) {
          if (err) {
             return res.status(400).json({ err });
-         } else {
-            return res.status(200).json({
-               obj,
-            });
          }
+         return res.status(200).json({
+            obj,
+         });
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in fetching Tests');
    }
 });
@@ -114,19 +109,17 @@ router.get('/test-temp/search', auth, async (req, res) => {
  */
 router.delete('/delete-exam/:examId', auth, async (req, res) => {
    const examId = req.params.examId;
-   console.log(examId);
+
    try {
-      const data = await TestTemp.findByIdAndDelete(examId, function (err) {
+      await TestTemp.findByIdAndDelete(examId, function (err) {
          if (err) {
             return res.status(400).json({ message: 'failed to delete document' });
-         } else {
-            return res.status(200).json({
-               message: 'successfully deleted',
-            });
          }
+         return res.status(200).json({
+            message: 'successfully deleted',
+         });
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Deleting');
    }
 });

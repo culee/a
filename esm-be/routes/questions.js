@@ -11,7 +11,6 @@ require('dotenv').config();
  * @description -
  */
 router.get('/search', auth, async (req, res) => {
-   console.log('fetch question');
    const { testName, className, terms, level } = req.query;
    const conditions = {};
    if (level) {
@@ -30,19 +29,16 @@ router.get('/search', auth, async (req, res) => {
       conditions.terms = terms;
    }
 
-   console.log(conditions);
    try {
       await Questions.find(conditions, function (err, obj) {
          if (err) {
             return res.status(400).json({ err });
-         } else {
-            return res.status(200).json({
-               obj,
-            });
          }
+         return res.status(200).json({
+            obj,
+         });
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in fetching Tests');
    }
 });
@@ -54,7 +50,6 @@ router.get('/search', auth, async (req, res) => {
  */
 router.post('/create-question', auth, async (req, res) => {
    const { teacherId, testName, className, answers, questions } = req.body;
-   console.log(req.body);
    try {
       let savedQuestions = [];
 
@@ -79,7 +74,7 @@ router.post('/create-question', auth, async (req, res) => {
          data: savedQuestions,
       };
 
-      res.status(200).json({
+      return res.status(200).json({
          payload,
       });
    } catch (err) {
@@ -95,7 +90,6 @@ router.post('/create-question', auth, async (req, res) => {
  */
 router.put('/update-question/:questionId', auth, async (req, res) => {
    const questionId = req.params.questionId;
-   console.log(questionId);
    const updateData = req.body;
    try {
       const existingQuestion = await Questions.findById(questionId);
@@ -112,11 +106,10 @@ router.put('/update-question/:questionId', auth, async (req, res) => {
       existingQuestion.answer = updateData.answer;
 
       const updatedQuestion = await existingQuestion.save();
-      res.status(200).json({
+      return res.status(200).json({
          data: updatedQuestion,
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Updating');
    }
 });
@@ -128,19 +121,16 @@ router.put('/update-question/:questionId', auth, async (req, res) => {
  */
 router.delete('/delete-question/:questionId', auth, async (req, res) => {
    const questionId = req.params.questionId;
-   // console.log(questionId);
    try {
-      const data = await Questions.findByIdAndDelete(questionId, function (err) {
+      await Questions.findByIdAndDelete(questionId, function (err) {
          if (err) {
             return res.status(400).json({ message: 'failed to delete document' });
-         } else {
-            return res.status(200).json({
-               message: 'successfully deleted',
-            });
          }
+         return res.status(200).json({
+            message: 'successfully deleted',
+         });
       });
    } catch (err) {
-      console.log(err.message);
       res.status(500).send('Error in Deleting');
    }
 });
