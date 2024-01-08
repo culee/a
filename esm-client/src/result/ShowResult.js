@@ -6,6 +6,7 @@ import Chart from 'react-google-charts';
 
 function ShowResult(props) {
    const { testName, date } = props.selectedTest;
+   console.log(props.selectedTest);
    const testInfo = props.selectedTest[0];
    let marks, rightAnswers, submitMinutes, totalMarks, wrongAnswers, totalAttempt;
    // let name
@@ -20,6 +21,7 @@ function ShowResult(props) {
       totalAttempt = rightAnswers - -wrongAnswers;
    }
    const submitDate = new Date(date);
+
    return (
       <>
          <div className="container dashboard">
@@ -71,7 +73,9 @@ function ShowResult(props) {
                               />
                            </div>
                            <div className="marks">
-                              <h2 className="inlarge">Điểm</h2>
+                              <h2 className="inlarge">
+                                 Điểm : {testInfo.point || 0} / {testInfo.outOfMarks || 0}{' '}
+                              </h2>
                               <div className="marksBox">
                                  <div className="obtained__marks">
                                     {marks} / {totalMarks}

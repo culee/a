@@ -17,7 +17,6 @@ function QuestionBankCreateTest() {
    const [isOpenExamBank, setIsOpenExamBank] = useState(false);
    const [isOpenQuestionBank, setIsOpenQuestionBank] = useState(false);
    const [selectedQuestionData, setSelectedQuestionData] = useState(null);
-   console.log(selectedQuestionData);
    const [testName, setTestName] = useState();
    const [className, setClassName] = useState();
 
@@ -156,10 +155,26 @@ function QuestionBankCreateTest() {
                      Thời gian bắt đầu làm bài
                   </p>
                   <div className="start-time-box">
-                     <Form.Item name="startTime">
+                     <Form.Item
+                        name="startTime"
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Vui lòng nhập thời gian',
+                           },
+                        ]}
+                     >
                         <TimePicker placeholder="Chọn thời gian" className="time-picker" />
                      </Form.Item>
-                     <Form.Item name="startDate">
+                     <Form.Item
+                        name="startDate"
+                        rules={[
+                           {
+                              required: true,
+                              message: 'Vui lòng nhập ngày',
+                           },
+                        ]}
+                     >
                         <DatePicker placeholder="Chọn ngày" className="time-picker" />
                      </Form.Item>
                   </div>
@@ -176,7 +191,7 @@ function QuestionBankCreateTest() {
                   </div>
                   <div className="flex">
                      <div className=" mt-2 bg-[#2b62a0] text-white w-2/5 text-center rounded">
-                        <button type="button" className="p-1" onClick={() => setIsOpenExamBank((value) => !value)}>
+                        <button type="button" className="p-1" onClick={() => setIsOpenExamBank(true)}>
                            Chọn đề thi có sẵn
                         </button>
                      </div>
@@ -226,7 +241,9 @@ function QuestionBankCreateTest() {
                <ExamBank
                   isOpen={isOpenExamBank}
                   searchParams={{ testName, className }}
-                  onClose={() => setIsOpenExamBank(false)}
+                  onClose={() => {
+                     setIsOpenExamBank(false);
+                  }}
                   onSelected={setSelectedQuestionData}
                />
                <QuestionBank

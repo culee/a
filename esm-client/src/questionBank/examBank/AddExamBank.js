@@ -20,8 +20,6 @@ const AddExamBank = () => {
    const fetchData = useCallback(
       async (searchWithParams = true) => {
          try {
-            console.log(testName);
-            console.log(className);
             const response = await axios.get('/question/search', {
                params: searchWithParams
                   ? {
@@ -46,8 +44,6 @@ const AddExamBank = () => {
    const { addListExam } = useAddListExam();
 
    const handleSubmitExam = (value) => {
-      console.log(addListExam);
-
       const { testName, className, category } = value;
 
       var questions = addListExam.map((exam) => ({
@@ -67,7 +63,6 @@ const AddExamBank = () => {
                },
             });
 
-            console.log('Exam sent successfully:', response.data);
             // Handle success, e.g., update UI or show a success message
          } catch (error) {
             console.error('Error sending exam:', error);
@@ -88,8 +83,6 @@ const AddExamBank = () => {
    useEffect(() => {
       fetchData(false);
    }, []);
-
-   console.log(questionData);
 
    return (
       <div className="flex w-screen h-screen">

@@ -5,11 +5,13 @@ import { submitTest } from '../actions/testActions';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { logoutUser } from '../actions/authActions';
+import { QUESTION_POINT } from '../constants/common.constants';
 
 class RightSide extends Component {
    constructor(props) {
       super(props);
       this.state = {
+         levels: [],
          activateQue: 0,
          questionsData: [],
          changeIndex: 0,
@@ -17,6 +19,7 @@ class RightSide extends Component {
          selectedAnswers: Array.apply(undefined, Array(5)),
          value: null,
          testID: null,
+         selectedTest: null,
       };
    }
 
@@ -25,12 +28,13 @@ class RightSide extends Component {
          questionsData: props.questionsData,
          questionIndex: props.questionIndex,
          testID: props.testID,
+         levels: props.levels,
+         selectedTest: props.selectedTest,
       };
    }
 
    handleClearResponse = (index) => {
       let newSelectedAnswers = this.state.selectedAnswers;
-      console.log(newSelectedAnswers[index]);
       let blankClearAttempt = newSelectedAnswers[index] === undefined ? true : false;
 
       newSelectedAnswers[index] = undefined;
@@ -58,8 +62,6 @@ class RightSide extends Component {
 
    changeActivatedQueInChild = (changeActivatedQue) => {
       if (changeActivatedQue === 'next__question') {
-         console.log('insdie if');
-         console.log(this.state.questionsData.length, this.state.activateQue);
          if (this.state.activateQue < this.state.questionsData.length - 1) {
             this.setState({
                activateQue: this.state.activateQue + 1,
@@ -89,29 +91,39 @@ class RightSide extends Component {
       let correct = 0,
          wrong = 0,
          unanswered = 0,
+         correctPoint = 0,
          totalMarks = answers.length,
          dataToSubmit;
 
-      userAnswers.map((element, index) => {
+      userAnswers.forEach((element, index) => {
          if (element === undefined) {
             unanswered = unanswered + 1;
          } else if (element !== answers[index]) {
             wrong = wrong + 1;
          } else {
+            const currentPoint = QUESTION_POINT[this.state.levels[index]];
+            correctPoint += currentPoint;
             correct = correct + 1;
          }
-         dataToSubmit = {
-            testID,
-            correct,
-            unanswered,
-            totalMarks,
-            profileID,
-            testName,
-            firstName,
-            lastName,
-            wrong,
-         };
       });
+
+      const totalLevelPoint = this.state.levels.reduce((init, level) => QUESTION_POINT[level] + init, 0);
+      const outOfMarks = this.state.selectedTest.outOfMarks;
+      const point = Math.floor((correctPoint / totalLevelPoint) * outOfMarks);
+
+      dataToSubmit = {
+         testID,
+         correct,
+         unanswered,
+         totalMarks,
+         profileID,
+         testName,
+         firstName,
+         lastName,
+         wrong,
+         point,
+         outOfMarks,
+      };
       this.props.submitTest(dataToSubmit);
       this.props.signOut();
       return;
@@ -129,6 +141,7 @@ class RightSide extends Component {
                <div className="question__no">
                   Thứ {this.state.activateQue + 1} trong {this.state.questionsData.length} câu hỏi
                </div>
+               <div>Số điểm: {QUESTION_POINT[this.state.levels[this.state.activateQue]]}</div>
                {this.state.questionsData &&
                   this.state.questionsData.map((question, index) => {
                      if (this.state.activateQue === index) {

@@ -36,32 +36,34 @@ const ExamBankItem = ({ data, onClick }) => {
                Chọn
             </Button>
          </div>
-         <Collapse>
-            <Collapse.Panel header="Nội dung câu hỏi">
-               <Collapse>
-                  {data.questions.length > 0 ? (
-                     <>
-                        {data.questions.map((item, index) => (
-                           <Collapse.Panel header={item.description} key={index + 1}>
-                              <Typography className="mb-1">Độ khó: {item.level}</Typography>
-                              {item.options.length > 0 ? (
-                                 <div className="flex flex-col gap-1">
-                                    {item.options.map(({ option }, i) => (
-                                       <Input key={`option-${i}`} value={option} disabled />
-                                    ))}
-                                 </div>
-                              ) : (
-                                 <Typography>Không có đáp án nào</Typography>
-                              )}
-                           </Collapse.Panel>
-                        ))}
-                     </>
-                  ) : (
-                     <Typography>Không có câu hỏi</Typography>
-                  )}
-               </Collapse>
-            </Collapse.Panel>
-         </Collapse>
+         <div onClick={(e) => e.stopPropagation()}>
+            <Collapse>
+               <Collapse.Panel header="Nội dung câu hỏi">
+                  <Collapse>
+                     {data.questions.length > 0 ? (
+                        <>
+                           {data.questions.map((item, index) => (
+                              <Collapse.Panel header={item.description} key={index + 1}>
+                                 <Typography className="mb-1">Độ khó: {item.level}</Typography>
+                                 {item.options.length > 0 ? (
+                                    <div className="flex flex-col gap-1">
+                                       {item.options.map(({ option }, i) => (
+                                          <Input key={`option-${i}`} value={option} disabled />
+                                       ))}
+                                    </div>
+                                 ) : (
+                                    <Typography>Không có đáp án nào</Typography>
+                                 )}
+                              </Collapse.Panel>
+                           ))}
+                        </>
+                     ) : (
+                        <Typography>Không có câu hỏi</Typography>
+                     )}
+                  </Collapse>
+               </Collapse.Panel>
+            </Collapse>
+         </div>
       </div>
    );
 };

@@ -126,6 +126,7 @@ router.post('/create-test', auth, async (req, res) => {
       section,
       startTime,
       endAt,
+      levels,
    } = req.body;
 
    try {
@@ -154,6 +155,7 @@ router.post('/create-test', auth, async (req, res) => {
          section,
          startTime, //'2023-01-01T12:00:00'
          endAt,
+         levels: levels || [],
       });
 
       let data = await createTest.save();

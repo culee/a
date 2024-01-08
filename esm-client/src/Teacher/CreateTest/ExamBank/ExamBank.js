@@ -54,9 +54,13 @@ const ExamBank = ({ isOpen, searchParams, onClose, onSelected }) => {
       }
    }, [searchParams]);
 
-   const handleSelectExamFromList = useCallback((id) => {
-      setSelectedId(id);
-   }, []);
+   const handleSelectExamFromList = useCallback(
+      (id) => {
+         setSelectedId(id);
+         onClose();
+      },
+      [onClose],
+   );
 
    useEffect(() => {
       if (isOpen) {
@@ -69,8 +73,7 @@ const ExamBank = ({ isOpen, searchParams, onClose, onSelected }) => {
          return;
       }
       onSelected(selectedData);
-      onClose();
-   }, [selectedData, onSelected, onClose]);
+   }, [selectedData, onSelected]);
 
    return (
       <>

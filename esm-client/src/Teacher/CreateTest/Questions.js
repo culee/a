@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
-import { Input, Popover } from 'antd';
+import React, { useMemo, useState } from 'react';
+import { Input, Popover, Select } from 'antd';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { QUESTION_LEVEL } from '../../constants/common.constants';
 
 export default function Rules(props) {
    const [questionDescripiton, setQuestionDescripiton] = useState('');
-
    const [opiton1, setOption1] = useState('');
    const [opiton2, setOption2] = useState('');
    const [opiton3, setOption3] = useState('');
    const [opiton4, setOption4] = useState('');
-
    const [answer, setAnswer] = useState('');
    const [editAnswer, setEditAnswer] = useState('');
+   const [level, setLevel] = useState('Easy');
+
+   const disabledAddButton = useMemo(() => {
+      return !questionDescripiton || !opiton1 || !opiton2 || !opiton3 || !opiton4 || !answer;
+   }, [questionDescripiton, opiton1, opiton2, opiton3, opiton4, answer]);
 
    const submitInput = (
       <div>
@@ -38,7 +42,8 @@ export default function Rules(props) {
       setAnswer(e.target.value);
    };
    const handleAddQuestion = () => {
-      if (!questionDescripiton || !opiton1 || !opiton2 || !opiton3 || !opiton4 || !answer) {
+      setEditAnswer('');
+      if (disabledAddButton) {
          alert('Vui lòng điền đầy đủ thông tin cho câu hỏi.');
          return;
       }
@@ -55,16 +60,17 @@ export default function Rules(props) {
          opiton3,
          opiton4,
          answer,
+         level,
       };
 
       props.addQuestion(questionData);
-      console.log(questionData);
       setQuestionDescripiton('');
       setOption1('');
       setOption2('');
       setOption3('');
       setOption4('');
       setAnswer('');
+      setLevel('Easy');
    };
 
    return (
@@ -81,42 +87,33 @@ export default function Rules(props) {
                <div className="add__new" onClick={handleAddQuestion}>
                   {
                      <Popover content={submitInput}>
-                        <AiFillPlusCircle className="success" />
+                        <AiFillPlusCircle className={`success ${disabledAddButton && 'disabled'}`} />
                      </Popover>
                   }
                </div>
             </div>
+            <div className="mb-4">
+               <p className="mb-0 mt-2 text-[#1e90ff] font-medium">Độ khó</p>
+               <Select
+                  defaultValue={'Easy'}
+                  value={level}
+                  onChange={(val) => {
+                     setLevel(val);
+                  }}
+                  options={Object.entries(QUESTION_LEVEL).map(([key, value]) => ({
+                     label: value,
+                     value: key,
+                  }))}
+                  style={{ width: 120 }}
+               />
+            </div>
             <div className="question__options">
                <p className="mb-[-3px] mt-2 text-[#1e90ff] font-medium	"> Đáp án</p>
 
-               <Input
-                  placeholder="Đáp án 1"
-                  className="input option"
-                  value={opiton1}
-                  onChange={handleOption1}
-                  style={{ margin: '10 5px' }}
-               />
-               <Input
-                  placeholder="Đáp án 2"
-                  className="input option"
-                  value={opiton2}
-                  onChange={handleOption2}
-                  style={{ margin: '10 5px' }}
-               />
-               <Input
-                  placeholder="Đáp án 3"
-                  className="input option"
-                  value={opiton3}
-                  onChange={handleOption3}
-                  style={{ margin: '10 5px' }}
-               />
-               <Input
-                  placeholder="Đáp án 4"
-                  className="input option"
-                  value={opiton4}
-                  onChange={handleOption4}
-                  style={{ margin: '10 5px' }}
-               />
+               <Input placeholder="Đáp án 1" className="input option" value={opiton1} onChange={handleOption1} />
+               <Input placeholder="Đáp án 2" className="input option" value={opiton2} onChange={handleOption2} />
+               <Input placeholder="Đáp án 3" className="input option" value={opiton3} onChange={handleOption3} />
+               <Input placeholder="Đáp án 4" className="input option" value={opiton4} onChange={handleOption4} />
                <p className="m-[15px_0_0_0] text-[#3eb43e] font-medium	">Đáp án đúng</p>
                <Input
                   placeholder="Chọn đáp án đúng(1 hoặc 2, 3, 4)"
@@ -124,7 +121,6 @@ export default function Rules(props) {
                   className="input option"
                   value={answer}
                   onChange={handleAnswer}
-                  style={{ margin: '10 5px' }}
                   min={1}
                   max={4}
                />

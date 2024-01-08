@@ -1,4 +1,5 @@
 @import '~antd/dist/antd.css';
+
 :root {
   --primary: #1e90ff;
   --light-primary: #7ebfff;
@@ -14,6 +15,7 @@
   --typography-md: 2em;
   --typography-xl: 3em;
   --box-shadow: #f3f1f1;
+  --disabled: #ccc
 }
 
 html {
@@ -50,6 +52,11 @@ html {
   cursor: pointer;
 }
 
+.disabled {
+  color: var(--disabled);
+  cursor: default;
+}
+
 /* h1, h2, h3, h4, h5 {
   font-family: 'Viga', sans-serif;
 }
@@ -83,10 +90,12 @@ body {
 .justify-content-between {
   justify-content: space-between;
 }
-.pointer__select__none{
-  user-select:  none !important;
+
+.pointer__select__none {
+  user-select: none !important;
   pointer-events: none !important;
 }
+
 /* media queries */
 
 @media(min-width:768px) {

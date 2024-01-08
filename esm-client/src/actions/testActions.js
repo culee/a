@@ -122,8 +122,19 @@ export const fetchTests = (className) => async (dispatch) => {
 };
 
 export const submitTest = (data) => async (dispatch) => {
-   // dispatch(requestTests());
-   const { testID, correct, unanswered, totalMarks, profileID, testName, firstName, lastName, wrong } = data;
+   const {
+      testID,
+      correct,
+      unanswered,
+      totalMarks,
+      profileID,
+      testName,
+      firstName,
+      lastName,
+      wrong,
+      point,
+      outOfMarks,
+   } = data;
    const testData = JSON.parse(localStorage.getItem(testID));
    let submitMinutes = testData.rM;
    const submitBy = [
@@ -137,6 +148,8 @@ export const submitTest = (data) => async (dispatch) => {
          lastName,
          wrong,
          submitMinutes,
+         point,
+         outOfMarks,
       },
    ];
 
@@ -189,7 +202,6 @@ export const fetchTeacherTests = (profileID) => async (dispatch) => {
    await fetch(`/teacher/tests/${profileID}`, requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        
          if (data) {
             if (data?.error?.name === 'TokenExpiredError') {
                console.log(data);

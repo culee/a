@@ -37,6 +37,10 @@ export default function RenderData(props) {
                        />
                        <TiDelete className="danger" onClick={() => handleClick(index)} style={{ fontSize: '30px' }} />
                     </div>
+                    <div className="mb-2">
+                       <p className="mb-[-3px] mt-2 text-[#1e90ff] font-medium">Độ khó</p>
+                       <Input className="input option" value={item.level} readonly="readOnly" />
+                    </div>
                     <div className="question__options">
                        <p className="mb-[-3px] mt-2 text-[#1e90ff] font-medium	"> Đáp án</p>
 

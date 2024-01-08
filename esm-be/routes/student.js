@@ -157,12 +157,11 @@ router.put('/update-profile/:profileID', auth, async (req, res) => {
  */
 
 router.put('/submit-test/:testID', auth, async (req, res) => {
-   const testID = req.params.testID;
-   const submittedData = req.body.submitBy;
-   const testName = req.body.testName;
-   const date = Date.now();
-
    try {
+      const testID = req.params.testID;
+      const submittedData = req.body.submitBy;
+      const testName = req.body.testName;
+      const date = Date.now();
       await Test.updateOne(
          { _id: testID },
          {

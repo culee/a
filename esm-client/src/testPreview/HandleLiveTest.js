@@ -26,7 +26,9 @@ class HandleLiveTest extends Component {
          questionIndex: 0,
          flag: 0,
          testName: null,
-         userAnswers: Array.apply(undefined, Array(5)),
+         userAnswers: [],
+         levels: [],
+         selectedTest: null,
       };
    }
 
@@ -37,11 +39,12 @@ class HandleLiveTest extends Component {
 
       this.setState({
          questionsData: this.props.selectedTest.questions,
-         // questionsData:questions,
          answers: this.props.selectedTest.answers,
          testID: this.props.testID,
          testName: this.props.selectedTest.testName,
          totalPending: this.props.selectedTest.questions.length,
+         levels: this.props.selectedTest.levels,
+         selectedTest: this.props.selectedTest,
       });
       // fire function given by redux
    }
@@ -162,6 +165,7 @@ class HandleLiveTest extends Component {
                </div>
                <RightSide
                   questionsData={this.state.questionsData}
+                  levels={this.state.levels}
                   questionAnswered={this.questionAnswered}
                   questionIndex={this.state.questionIndex}
                   handleClearResponse={this.handleClearResponse}
@@ -171,6 +175,7 @@ class HandleLiveTest extends Component {
                   answers={this.state.answers}
                   testID={this.state.testID}
                   testName={this.state.testName}
+                  selectedTest={this.state.selectedTest}
                />
                <div className="footer">
                   <Footer handleFooterButtons={this.handleFooterButtons} handleSubmitTest={this.handleSubmitTest} />

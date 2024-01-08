@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component } from 'react';
 import { Row, Col, Form, Input, Button, Select, notification, TimePicker, DatePicker } from 'antd';
 import './index.css';
 import { connect } from 'react-redux';
@@ -25,11 +25,8 @@ class CreateTest extends Component {
    }
 
    submitForm = (values) => {
-      let questions = [];
-      let answers = [];
       const { testName, category, className, section, minutes, outOfMarks } = values;
-
-      questions = this.state.questions.map((question, index) => {
+      const questions = this.state.questions.map((question, index) => {
          return {
             description: question.questionDescripiton,
             options: [
@@ -48,13 +45,11 @@ class CreateTest extends Component {
             ],
          };
       });
-      this.state.questions.map((question, index) => {
-         answers.push(parseInt(question.answer));
-      });
+      const answers = this.state.questions.map(({ answer }) => parseInt(answer));
+      const levels = this.state.questions.map(({ level }) => level);
       const teacherId = this.props.teacherID;
       const rules = this.state.rules;
       const startTime = `${values.startDate.format('YYYY-MM-DD')}T${values.startTime.format('HH:mm:ss')}`;
-
       const sendData = {
          teacherId,
          testName,
@@ -67,6 +62,7 @@ class CreateTest extends Component {
          outOfMarks,
          questions,
          answers,
+         levels,
          startTime,
       };
 
@@ -108,19 +104,9 @@ class CreateTest extends Component {
       notification.open(args);
    };
 
-   addQuestion = ({ questionDescripiton, opiton1, opiton2, opiton3, opiton4, answer }) => {
+   addQuestion = (questionData) => {
       this.setState({
-         questions: [
-            {
-               questionDescripiton,
-               opiton1,
-               opiton2,
-               opiton3,
-               opiton4,
-               answer,
-            },
-            ...this.state.questions,
-         ],
+         questions: [questionData, ...this.state.questions],
       });
    };
 
@@ -272,7 +258,6 @@ class CreateTest extends Component {
                            <DatePicker placeholder="Chọn ngày" className="time-picker" />
                         </Form.Item>
                      </div>
-
                      <p className="primary-wihtoutFont mt-2" style={{ fontWeight: '500' }}>
                         Câu hỏi
                      </p>
